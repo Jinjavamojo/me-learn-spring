@@ -3,20 +3,23 @@ package spring;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import spring.beans.MediaPlayer;
+import spring.profilebeans.DataSource;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "beans/config/config.xml")
-public class SpringTest2 {
+@ContextConfiguration(locations = "profilebeans/config.xml")
+@ActiveProfiles("prod")
+public class SpringTestProfiles {
 
     @Autowired
-    public MediaPlayer player;
+    private DataSource dataSource;
 
     @Test
     public void test() {
-        player.play();
+        System.out.println(dataSource.getConnString());
     }
 }
