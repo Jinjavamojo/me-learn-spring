@@ -1,4 +1,8 @@
-package spring.beans;
+package spring.simpleinjecting;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
