@@ -37,6 +37,7 @@ dependencies {
     compile 'org.springframework:spring-core:4.2.5.RELEASE'
     compile 'org.springframework:spring-expression:4.2.5.RELEASE'
     compile 'org.springframework:spring-test:4.2.5.RELEASE'
+    compile 'com.miglayout:miglayout:3.7.3.1'
 
 }
 
