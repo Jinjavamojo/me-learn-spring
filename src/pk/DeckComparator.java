@@ -3,7 +3,7 @@ package pk;
 import java.util.Comparator;
 
 
-public class CardComparator implements Comparator {
+public class DeckComparator implements Comparator {
 
     @Override
     public int compare(Object o, Object t1) {

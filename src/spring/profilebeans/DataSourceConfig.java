@@ -22,7 +22,7 @@ public class DataSourceConfig {
     }
 
     @Bean
-    @Conditional(value = MagicExistsCondition.class)
+    //@Conditional(value = MagicExistsCondition.class)
     public MagicBean getMagicBean() {
         return new MagicBean();
     }

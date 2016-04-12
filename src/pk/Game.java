@@ -1,5 +1,7 @@
 package pk;
 
+import pk.view.SingleWindow;
+
 import org.junit.Test;
 import pk.combinations.Kare;
 import pk.combinations.Pair;
@@ -10,7 +12,7 @@ import java.util.*;
 
 
 public class Game {
-
+    
 
     public static void main(String[] args) {
     }

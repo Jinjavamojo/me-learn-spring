@@ -10,15 +10,20 @@ import spring.profilebeans.DataSource;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "config.xml")
+//@ContextConfiguration(locations = "config.xml")
+@ContextConfiguration(classes = DataSourceConfig.class)
 @ActiveProfiles("prod")
 public class SpringTestProfiles {
 
     @Autowired
     private DataSource dataSource;
 
+    //@Autowired
+    //private MagicBean magicBean;
+
     @Test
     public void test() {
         System.out.println(dataSource.getConnString());
+        //System.out.println(magicBean!= null ? magicBean.doSomeMagic() : "");
     }
 }
