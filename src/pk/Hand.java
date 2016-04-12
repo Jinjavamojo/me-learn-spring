@@ -1,21 +1,12 @@
 package pk;
 
-/**
- * Copyright 2016 LANIT group.
- * http://www.lanit.ru/
- * <p/>
- * Repository path:    $HeadURL$
- * Last committed:     $Revision$
- * Last changed by:    $Author$
- * Last changed date:  $Date$
- * ID:                 $Id$
- */
+
 public class Hand {
 
     private int number;
     private Card firstCard;
     private Card secondCard;
-    private Combination combination;
+    private CardSet cardSet;
 
 
     public int getNumber() {
@@ -26,12 +17,12 @@ public class Hand {
         this.number = number;
     }
 
-    public Combination getCombination() {
-        return combination;
+    public CardSet getCardSet() {
+        return cardSet;
     }
 
-    public void setCombination(Combination combination) {
-        this.combination = combination;
+    public void setCardSet(CardSet cardSet) {
+        this.cardSet = cardSet;
     }
 
     public Card getFirstCard() {

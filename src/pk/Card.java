@@ -1,16 +1,6 @@
 package pk;
 
-/**
- * Copyright 2016 LANIT group.
- * http://www.lanit.ru/
- * <p/>
- * Repository path:    $HeadURL$
- * Last committed:     $Revision$
- * Last changed by:    $Author$
- * Last changed date:  $Date$
- * ID:                 $Id$
- */
-public class Card {
+public class Card implements Cloneable {
 
     private Rank rank;
     private Mast mast;
@@ -55,6 +45,11 @@ public class Card {
 
     @Override
     public String toString() {
-        return rank.toString() + " " + mast.toString();
+        return rank.toString() + " " + mast.toString() + "/" + (rank.value + mast.value);
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return new Card(rank,mast);
     }
 }
