@@ -33,6 +33,8 @@ public class SingleWindow extends JFrame {
         //contentPane.setLayout(migLayout);
         pack();
         setVisible(true);
+        CardChooser cardChooser = new CardChooser();
+
 
     }
 
