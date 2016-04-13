@@ -1,4 +1,4 @@
-package pk;
+package pk.model;
 
 
 public enum  Rank {
@@ -15,8 +15,7 @@ public enum  Rank {
     QUEEN(12),
     KING(13),
     ACE(14);
-
-    int value;
+    private int value;
 
     Rank(int value) {
         this.value = value;
@@ -26,4 +25,10 @@ public enum  Rank {
     public String toString() {
         return super.toString();
     }
+
+    public int getValue() {
+        return value;
+    }
+
+
 }

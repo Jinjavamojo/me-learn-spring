@@ -15,10 +15,10 @@ import java.util.List;
  * Last changed date:  $Date$
  * ID:                 $Id$
  */
-public class Street extends CardSet{
+public class StreetFlush extends CardSet {
 
-    public Street(List<Card> cards) {
-       this.cards = new ArrayList<>();
+    public StreetFlush(List<Card> cards) {
+        this.cards = new ArrayList<>();
         cards.addAll(cards);
     }
 }

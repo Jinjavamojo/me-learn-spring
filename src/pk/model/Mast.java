@@ -1,4 +1,4 @@
-package pk;
+package pk.model;
 
 
 public enum Mast {
@@ -11,5 +11,9 @@ public enum Mast {
 
     Mast(int value) {
         this.value = value;
+    }
+
+    public int getValue() {
+        return value;
     }
 }

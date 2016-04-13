@@ -1,19 +1,22 @@
 package pk.combinations;
 
-import pk.Card;
+import pk.model.Card;
 
-import java.util.List;
+import java.util.ArrayList;
 
-public class Pair {
+public class Pair extends CardSet {
 
     public final Card card1;
     public final Card card2;
+    private boolean haveEqualPair = false;
 
     public Pair(Card card1, Card card2) {
+        cards = new ArrayList<>();
+        cards.add(card1);
+        cards.add(card2);
         this.card1 = card1;
         this.card2 = card2;
     }
-
     public boolean contains(Card card) {
         return card1.equals(card) || card2.equals(card);
     }
@@ -24,5 +27,17 @@ public class Pair {
 
     public Card getCard2() {
         return card2;
+    }
+
+    public int getWeight() {
+        return card1.getRank().getValue() + card2.getRank().getValue();
+    }
+
+    public boolean isHaveEqualPair() {
+        return haveEqualPair;
+    }
+
+    public void setHaveEqualPair(boolean haveEqualPair) {
+        this.haveEqualPair = haveEqualPair;
     }
 }

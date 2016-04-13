@@ -2,7 +2,6 @@ package pk.combinations;
 
 import pk.model.Card;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,10 +14,15 @@ import java.util.List;
  * Last changed date:  $Date$
  * ID:                 $Id$
  */
-public class Street extends CardSet{
+public abstract class CardSet {
 
-    public Street(List<Card> cards) {
-       this.cards = new ArrayList<>();
-        cards.addAll(cards);
+    protected List<Card> cards;
+
+    public List<Card> getCards() {
+        return cards;
+    }
+
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
     }
 }

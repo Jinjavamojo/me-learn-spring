@@ -1,4 +1,4 @@
-package pk;
+package pk.combinations;
 
 /**
  * Copyright 2016 LANIT group.
@@ -10,5 +10,8 @@ package pk;
  * Last changed date:  $Date$
  * ID:                 $Id$
  */
-public class RankComparator {
+public class FullHouse extends CardSet {
+
+    Triple triple;
+    Pair pair;
 }

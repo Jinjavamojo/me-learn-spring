@@ -1,10 +1,5 @@
 package pk.combinations;
 
-import pk.model.Card;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Copyright 2016 LANIT group.
  * http://www.lanit.ru/
@@ -15,10 +10,5 @@ import java.util.List;
  * Last changed date:  $Date$
  * ID:                 $Id$
  */
-public class Street extends CardSet{
-
-    public Street(List<Card> cards) {
-       this.cards = new ArrayList<>();
-        cards.addAll(cards);
-    }
+public class Flush extends CardSet {
 }

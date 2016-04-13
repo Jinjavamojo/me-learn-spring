@@ -1,8 +1,8 @@
 package pk.view;
 
 import net.miginfocom.swing.MigLayout;
-import pk.Mast;
-import pk.Rank;
+import pk.model.Mast;
+import pk.model.Rank;
 
 import javax.swing.*;
 import java.awt.*;

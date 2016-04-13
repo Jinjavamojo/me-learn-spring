@@ -1,8 +1,9 @@
 package pk.combinations;
 
-import pk.Card;
-import pk.Rank;
+import pk.model.Card;
+import pk.model.Rank;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,13 +16,11 @@ import java.util.List;
  * Last changed date:  $Date$
  * ID:                 $Id$
  */
-public class Kare {
-
-
-    public List<Card> cards;
+public class Kare extends CardSet  {
 
     public Kare(List<Card> cards) {
-        this.cards = cards;
+        this.cards = new ArrayList<>();
+        cards.addAll(cards);
     }
 
     public Rank getRank() {

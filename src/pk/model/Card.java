@@ -1,4 +1,4 @@
-package pk;
+package pk.model;
 
 public class Card implements Cloneable {
 
@@ -40,16 +40,16 @@ public class Card implements Cloneable {
 
     @Override
     public int hashCode() {
-        return mast.value + rank.value;
+        return mast.getValue() + rank.getValue();
     }
 
     @Override
     public String toString() {
-        return rank.toString() + " " + mast.toString() + "/" + (rank.value + mast.value);
+        return rank.toString() + " " + mast.toString() + "/" + (rank.getValue() + mast.getValue());
     }
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
+    protected Card clone() throws CloneNotSupportedException {
         return new Card(rank,mast);
     }
 }
