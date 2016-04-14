@@ -6,6 +6,7 @@ import pk.combinations.*;
 import org.junit.Test;
 import pk.comparators.DeckComparator;
 import pk.model.*;
+import pk.view.SingleWindow;
 
 import java.util.*;
 
@@ -14,6 +15,7 @@ public class Game extends Assert {
     
 
     public static void main(String[] args) {
+        SingleWindow w = new SingleWindow();
     }
 
     @Test
