@@ -6,6 +6,8 @@ import pk.model.Rank;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowEvent;
 import java.util.*;
 import java.util.List;
 
@@ -23,6 +25,23 @@ public class SingleWindow extends JFrame {
         jPanel.add(createList(),"span 1 2");
         JComboBox mustCombobox = createComboBox(Arrays.asList(Mast.values()));
         JButton addMast = createButton(new Dimension(50,25), "add mast");
+        addMast.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                final CardChooser cardChooser = new CardChooser();
+                cardChooser.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        CardCoordinate cardCoordinate = cardChooser.getCardCoordinate();
+                        int g = 0;
+                    }
+                });
+                final JDialog frame = new JDialog(cardChooser, "Choose card", true);
+                frame.setContentPane(cardChooser.getContentPane());
+                frame.pack();
+                frame.setVisible(true);
+            }
+        });
         jPanel.add(mustCombobox);
         jPanel.add(addMast, "wrap");
         JComboBox chooseRank = createComboBox(Arrays.asList(Rank.values()));
@@ -33,9 +52,6 @@ public class SingleWindow extends JFrame {
         //contentPane.setLayout(migLayout);
         pack();
         setVisible(true);
-        CardChooser cardChooser = new CardChooser();
-
-
     }
 
     public JList createList() {
