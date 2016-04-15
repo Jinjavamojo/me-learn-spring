@@ -1,54 +1,33 @@
 package pk.view;
 
 import net.miginfocom.swing.MigLayout;
+import pk.model.Card;
+import pk.model.CardCoordinate;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.util.HashMap;
 
 
 public class CardChooser extends JFrame{
 
     private CardCoordinate cardCoordinate;
     public CardChooser() {
-        try {
-            BufferedImage bigImg = ImageIO.read(new File("resources/aDeck2.png"));
-            final int width = 144;
-            int spaceW = 14;
-            final int height = 212;
-            final int rows = 4;
-            final int cols = 13;
-            BufferedImage[][] sprites = new BufferedImage[rows][cols];
-
-            for (int i = 0; i < rows; i++) {
-                for (int j = 0; j < cols; j++) {
-                    if (j == cols - 1 || i == rows - 1) {
-                        spaceW = 0;
-                    } else {
-                        spaceW = 14;
-                    }
-                    sprites[i][j] = bigImg.getSubimage(
-                            j * width + (j * spaceW),
-                            i * height + (i * spaceW),
-                            width,
-                            height
-                    );
-                }
-            }
             JPanel panel = new JPanel();
             panel.setLayout(new MigLayout());
-            for (int i = 0; i < rows; i++) {
-                for (int j = 0; j < cols; j++) {
-                    ImageIcon imageIcon = new ImageIcon(sprites[i][j]);
+            for (int i = 0; i < SingleWindow.rows; i++) {
+                for (int j = 0; j < SingleWindow.cols; j++) {
+                    ImageIcon imageIcon = new ImageIcon(SingleWindow.sprites[i][j]);
                     Image img = imageIcon.getImage();
-                    Image newimg = img.getScaledInstance(100, 100, Image.SCALE_AREA_AVERAGING);
+                    Image newimg = img.getScaledInstance(50, 75, Image.SCALE_AREA_AVERAGING);
                     ImageIcon total = new ImageIcon(newimg);
                     final CardImageButton imageButton = new CardImageButton(i, j, total);
-                    imageButton.setSize(new Dimension(50,100));
+                    imageButton.setPreferredSize(new Dimension(25, 25));
+                    if (SingleWindow.alreadyChoosenCards.get(new CardCoordinate(i,j)) != null) {
+                        imageButton.setEnabled(false);
+                    }
                     imageButton.addActionListener(new AbstractAction() {
                         @Override
                         public void actionPerformed(ActionEvent actionEvent) {
@@ -56,7 +35,7 @@ public class CardChooser extends JFrame{
                             CardChooser.this.dispose();
                         }
                     });
-                    if (j == cols - 1) {
+                    if (j == SingleWindow.cols - 1) {
                         panel.add(imageButton, "wrap");
                     } else {
                         panel.add(imageButton);
@@ -64,9 +43,6 @@ public class CardChooser extends JFrame{
                 }
             }
             setContentPane(panel);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public CardCoordinate getCardCoordinate() {

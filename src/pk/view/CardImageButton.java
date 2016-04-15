@@ -1,5 +1,7 @@
 package pk.view;
 
+import pk.model.CardCoordinate;
+
 import javax.swing.*;
 
 /**

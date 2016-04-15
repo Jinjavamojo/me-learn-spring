@@ -78,21 +78,10 @@ public class Game extends Assert {
         assertNull(street3);
     }
 
-    public static ArrayList<Card> initializeDeck() {
-        ArrayList<Card> deck = new ArrayList<>();
-        List<Mast> allMasts = Arrays.asList(Mast.values());
-        List<Rank> allRanks = Arrays.asList(Rank.values());
-        for (Mast mast : allMasts) {
-            for (Rank rank : allRanks) {
-                deck.add(new Card(rank, mast));
-            }
-        }
-        Collections.sort(deck, new DeckComparator());
-        return deck;
-    }
+
 
     public void tryGame() {
-        final ArrayList<Card> cards = initializeDeck();
+        final ArrayList<Card> cards = CombinationHelper.initializeDeck();
         Hand hand1 = new Hand(1);
         Hand hand2 = new Hand(2);
         List<Card> afterFlop = new ArrayList<>();
@@ -112,7 +101,7 @@ public class Game extends Assert {
     }
 
     public void doMagic(List<Hand> hands, List<Card> afterFlop) {
-        ArrayList<Card> deck = initializeDeck();
+        ArrayList<Card> deck =CombinationHelper. initializeDeck();
         for (Hand hand : hands) {
             deck.removeAll(hand.getCards());
         }

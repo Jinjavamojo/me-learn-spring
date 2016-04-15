@@ -1,10 +1,9 @@
 package pk;
 
 import pk.combinations.*;
+import pk.comparators.DeckComparator;
 import pk.comparators.RankComparator;
-import pk.model.Card;
-import pk.model.Mast;
-import pk.model.Rank;
+import pk.model.*;
 
 import java.util.*;
 
@@ -133,5 +132,62 @@ public class CombinationHelper {
         return null;
     }
 
+    public static ArrayList<Card> initializeDeck() {
+        ArrayList<Card> deck = new ArrayList<>();
+        List<Mast> allMasts = Arrays.asList(Mast.values());
+        List<Rank> allRanks = Arrays.asList(Rank.values());
+        for (Mast mast : allMasts) {
+            for (Rank rank : allRanks) {
+                deck.add(new Card(rank, mast));
+            }
+        }
+        Collections.sort(deck, new DeckComparator());
+        return deck;
+    }
 
+    public static void doMagic(List<Hand> hands, List<Card> flop ) {
+        final ArrayList<Card> deck = initializeDeck();
+        for (Hand hand : hands) {
+            deck.removeAll(hand.getCards());
+        }
+        deck.removeAll(flop);
+        List<HandCardSet> allCombs = new ArrayList<>();
+        for (Card card : deck) {
+            CombinationsForOneCard combinationsForOneCard = new CombinationsForOneCard();
+            for (Hand hand : hands) {
+                ArrayList<Card> cardSet = new ArrayList<>(hand.getCards());
+                cardSet.addAll(flop);
+                cardSet.add(card);
+                Pair pair = CombinationHelper.hasPair(cardSet);
+                TwoPairs twoPairs = CombinationHelper.hasTwoPairs(cardSet);
+                Triple triple = CombinationHelper.hasSet(cardSet);
+                Street street = CombinationHelper.hasStreet(cardSet);
+                Flush flush = CombinationHelper.hasFlush(cardSet);
+                FullHouse fullHouse = CombinationHelper.hasFullHouse(cardSet);
+                Kare kare = CombinationHelper.hasKare(cardSet);
+                StreetFlush streetFlush = CombinationHelper.hasStreetFlush(cardSet);
+                RoyalFlush royalFlush = CombinationHelper.hasRoyalFlush(cardSet);
+
+                if (pair != null)
+                    combinationsForOneCard.addPair(new HandCardSet<>(hand, pair));
+                if (twoPairs != null)
+                    combinationsForOneCard.addTwoPair(new HandCardSet<>(hand, twoPairs));
+                if (triple != null)
+                    combinationsForOneCard.addTriple(new HandCardSet<>(hand, triple));
+                if (street != null)
+                    combinationsForOneCard.addStreet(new HandCardSet<>(hand, street));
+                if (flush != null)
+                    combinationsForOneCard.addFlush(new HandCardSet<Flush>(hand, flush));
+                if (fullHouse != null)
+                    combinationsForOneCard.addFullHouse(new HandCardSet<FullHouse>(hand, fullHouse));
+                if (kare != null)
+                    combinationsForOneCard.addKare(new HandCardSet<>(hand, kare));
+                if (streetFlush != null)
+                    combinationsForOneCard.addStreetFlush(new HandCardSet<StreetFlush>(hand, streetFlush));
+                if (royalFlush != null)
+                    combinationsForOneCard.addRoyalFlush(new HandCardSet<RoyalFlush>(hand, royalFlush));
+            }
+            allCombs.addAll(combinationsForOneCard.getOnlyBestWinnerCombination());
+        }
+    }
 }

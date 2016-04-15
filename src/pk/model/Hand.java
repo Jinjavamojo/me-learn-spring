@@ -12,28 +12,27 @@ public class Hand {
     private int number;
     private Card firstCard;
     private Card secondCard;
-    private List<CardSet> cardSets;
 
     public Hand(int number) {
         this.number = number;
     }
 
+    public Hand(int number, Card firstCard, Card secondCard) {
+        this.number = number;
+        this.firstCard = firstCard;
+        this.secondCard = secondCard;
+    }
+
     public void initializeCards(Card c1, Card c2) {
         firstCard = c1;
         secondCard = c2;
-        cardSets = new ArrayList<>();
     }
 
     public Collection<Card> getCards() {
-        try {
             List<Card> cards = new ArrayList<>();
             cards.add(firstCard.clone());
             cards.add(secondCard.clone());
             return cards;
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     public int getNumber() {

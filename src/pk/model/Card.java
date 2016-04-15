@@ -49,7 +49,11 @@ public class Card implements Cloneable {
     }
 
     @Override
-    protected Card clone() throws CloneNotSupportedException {
-        return new Card(rank,mast);
+    public Card clone()  {
+        try {
+            return new Card(rank,mast);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
