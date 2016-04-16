@@ -4,7 +4,6 @@ import org.junit.Assert;
 import pk.combinations.*;
 
 import org.junit.Test;
-import pk.comparators.DeckComparator;
 import pk.model.*;
 import pk.view.SingleWindow;
 
@@ -26,7 +25,7 @@ public class Game extends Assert {
         c1.add(new Card(Rank.JACK, Mast.KRESTI));
         c1.add(new Card(Rank.JACK, Mast.CHERVI));
         c1.add(new Card(Rank.ACE, Mast.CHERVI));
-        Triple triple = CombinationHelper.hasSet(c1);
+        Triple triple = CombinationHelper.hasTriple(c1);
         Kare kare = CombinationHelper.hasKare(c1);
         assertNotNull(triple);
         assertNotNull(kare);
@@ -115,7 +114,7 @@ public class Game extends Assert {
                 cardSet.add(card);
                 Pair pair = CombinationHelper.hasPair(cardSet);
                 TwoPairs twoPairs = CombinationHelper.hasTwoPairs(cardSet);
-                Triple triple = CombinationHelper.hasSet(cardSet);
+                Triple triple = CombinationHelper.hasTriple(cardSet);
                 Street street = CombinationHelper.hasStreet(cardSet);
                 Flush flush = CombinationHelper.hasFlush(cardSet);
                 FullHouse fullHouse = CombinationHelper.hasFullHouse(cardSet);

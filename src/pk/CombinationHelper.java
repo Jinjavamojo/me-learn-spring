@@ -7,19 +7,11 @@ import pk.model.*;
 
 import java.util.*;
 
-/**
- * Copyright 2016 LANIT group.
- * http://www.lanit.ru/
- * <p/>
- * Repository path:    $HeadURL$
- * Last committed:     $Revision$
- * Last changed by:    $Author$
- * Last changed date:  $Date$
- * ID:                 $Id$
- */
+
 public class CombinationHelper {
 
-    private static Comparator<Card> comparator = new RankComparator();
+    private static Comparator<Card> ascRankComparator = new RankComparator(true);
+    private static Comparator<Card> descRankComparator = new RankComparator(false);
 
     public static Pair hasPair(List<Card> cards) {
         for (int i = 0; i < cards.size(); i++) {
@@ -48,7 +40,7 @@ public class CombinationHelper {
         return null;
     }
 
-    public static Triple hasSet(List<Card> cards) {
+    public static Triple hasTriple(List<Card> cards) {
         Pair pair = hasPair(cards);
         if (pair == null)
             return null;
@@ -62,16 +54,12 @@ public class CombinationHelper {
         return null;
     }
 
+
+
     public static Street hasStreet(List<Card> cards) {
-        List<Card> streetCards = hasStreet(cards, false);
-        return streetCards != null ? new Street(streetCards) : null;
-    }
-
-
-    private static List<Card> hasStreet(List<Card> cards, boolean isNeedEqualsMast) {
         List<Card> streetCards = new ArrayList<>();
         List<Rank> ranks = Arrays.asList(Rank.values());
-        Collections.sort(cards, comparator);
+        Collections.sort(cards, ascRankComparator);
         for (int i = 0; i < cards.size(); i++) { //loop each card as start
             streetCards.clear();
             Card firstCard = cards.get(i);
@@ -85,7 +73,7 @@ public class CombinationHelper {
                         streetCards.add(card);
                     }
                     if (streetCards.size() == 5) {
-                        return streetCards;
+                        return new Street(streetCards);
                     }
                 }
             }
@@ -95,32 +83,92 @@ public class CombinationHelper {
 
 
     public static Flush hasFlush(List<Card> cards) {
+        int start = 0;
+        int end = 4;
+        List<Card> chervi = new ArrayList<>();
+        List<Card> bubi = new ArrayList<>();
+        List<Card> piki = new ArrayList<>();
+        List<Card> kresti = new ArrayList<>();
+        for (Card card : cards) {
+            switch (card.getMast()) {
+                case CHERVI: chervi.add(card);break;
+                case BUBI: bubi.add(card);break;
+                case PIKI: piki.add(card);break;
+                case KRESTI: kresti.add(card);break;
+            }
+        }
+        if (chervi.size() >= 5) {
+            Collections.sort(chervi,new RankComparator(false));
+            return new Flush(chervi.subList(start,end));
+        }
+        if (bubi.size() >=5) {
+            Collections.sort(bubi,new RankComparator(false));
+            return new Flush(bubi.subList(start,end));
+        }
+        if (kresti.size() >=5) {
+            Collections.sort(kresti,new RankComparator(false));
+            return new Flush(kresti.subList(start,end));
+        }
+        if (piki.size() >=5) {
+            Collections.sort(piki,new RankComparator(false));
+            return new Flush(piki.subList(start,end));
+        }
         return null;
     }
 
     public static FullHouse hasFullHouse(List<Card> cardLis) {
-        throw new UnsupportedOperationException();
+        List<Card> c = new ArrayList<>(cardLis);
+        Pair pair = hasPair(c);
+        if (pair == null)
+            return null;
+        c.removeAll(pair.getCards());
+        Triple triple = hasTriple(c);
+        if (triple != null)
+            return new FullHouse(pair, triple);
+        return null;
+
     }
 
     public static Kare hasKare(List<Card> cards) {
-        Triple triple = hasSet(cards);
-        ArrayList<Card> temp = new ArrayList<Card>(cards);
-        temp.removeAll(triple.getList());
-        Card fourthCard = containRank(triple.card1.getRank(), temp);
-        if (fourthCard != null) {
-            ArrayList<Card> kareList = new ArrayList<Card>(triple.getList());
-            kareList.add(fourthCard);
-            return new Kare(kareList);
+        Triple triple = hasTriple(cards);
+        if (triple != null) {
+            ArrayList<Card> temp = new ArrayList<Card>(cards);
+            temp.removeAll(triple.getList());
+            Card fourthCard = containRank(triple.card1.getRank(), temp);
+            if (fourthCard != null) {
+                ArrayList<Card> kareList = new ArrayList<Card>(triple.getList());
+                kareList.add(fourthCard);
+                return new Kare(kareList);
+            }
         }
         return null;
     }
 
     public static StreetFlush hasStreetFlush(List<Card> cards) {
-        return new StreetFlush(hasStreet(cards, true));
+        Street street = hasStreet(cards);
+        if (street != null) {
+            List<Card> streetCards = street.getCards();
+            Mast streetMast = streetCards.get(0).getMast();
+            for (Card card : street.getCards()) {
+                if (!streetMast.equals(card.getMast()))
+                    return null;
+            }
+            return new StreetFlush(streetCards);
+        }
+        return null;
+
     }
 
     public static RoyalFlush hasRoyalFlush(List<Card> cardLis) {
-        throw new UnsupportedOperationException();
+        StreetFlush streetFlush = hasStreetFlush(cardLis);
+        if (streetFlush != null) {
+            List<Card> streetFlushCards = streetFlush.getCards();
+            Collections.sort(streetFlushCards,descRankComparator);
+            if (streetFlushCards.get(0).getRank() == Rank.ACE)
+                return new RoyalFlush(streetFlushCards);
+        }
+
+        return null;
     }
 
 
@@ -160,7 +208,7 @@ public class CombinationHelper {
                 cardSet.add(card);
                 Pair pair = CombinationHelper.hasPair(cardSet);
                 TwoPairs twoPairs = CombinationHelper.hasTwoPairs(cardSet);
-                Triple triple = CombinationHelper.hasSet(cardSet);
+                Triple triple = CombinationHelper.hasTriple(cardSet);
                 Street street = CombinationHelper.hasStreet(cardSet);
                 Flush flush = CombinationHelper.hasFlush(cardSet);
                 FullHouse fullHouse = CombinationHelper.hasFullHouse(cardSet);

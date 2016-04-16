@@ -1,5 +1,6 @@
 package pk.comparators;
 
+
 import pk.model.Card;
 
 import java.util.Comparator;
@@ -14,22 +15,30 @@ import java.util.Comparator;
  * Last changed date:  $Date$
  * ID:                 $Id$
  */
-public class RankComparator implements Comparator {
+public class RankComparator implements Comparator<Card> {
+
+    private boolean isAsc;
+
+    public RankComparator(boolean order) {
+        isAsc = order;
+    }
 
     @Override
-    public int compare(Object o, Object t1) {
-        if (o instanceof Card && t1 instanceof Card) {
-            Card o1 = (Card)o;
-            Card o2 = (Card)t1;
+    public int compare(Card o1, Card o2) {
             if (o1.getRank().getValue() == o2.getRank().getValue()) {
                 return 0;
             }
-            if (o1.getRank().getValue() > o2.getRank().getValue())
-                return 1;
-            else
+            if (o1.getRank().getValue() > o2.getRank().getValue()) {
+                if (isAsc) {
+                    return 1;
+                }
                 return -1;
-        } else {
-            throw new RuntimeException("");
-        }
+            }
+            else {
+                if (isAsc) {
+                    return -1;
+                }
+                return 1;
+            }
     }
 }

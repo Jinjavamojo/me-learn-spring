@@ -5,16 +5,7 @@ import pk.combinations.Pair;
 
 import java.util.Comparator;
 
-/**
- * Copyright 2016 LANIT group.
- * http://www.lanit.ru/
- * <p/>
- * Repository path:    $HeadURL$
- * Last committed:     $Revision$
- * Last changed by:    $Author$
- * Last changed date:  $Date$
- * ID:                 $Id$
- */
+
 public class PairComparator<T> implements Comparator<T> {
 
     @Override

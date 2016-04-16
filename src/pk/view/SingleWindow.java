@@ -15,9 +15,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
-/**
- * Created by Денис on 11.04.2016.
- */
+
 public class SingleWindow extends JFrame {
 
     public static BufferedImage[][] sprites;
@@ -38,8 +36,6 @@ public class SingleWindow extends JFrame {
         //MigLayout migLayout = new MigLayout();
         initImages();
         initDeck();
-        PlayerCardChooser playerCardChooser1= new PlayerCardChooser(1);
-        PlayerCardChooser playerCardChooser2= new PlayerCardChooser(2);
         JPanel jPanel = new JPanel(new MigLayout());
         jPanel.add(new JLabel("flop cards"),"wrap");
         for (int i = 0; i < 4; i++) {
@@ -79,8 +75,8 @@ public class SingleWindow extends JFrame {
                 Mast mast = null;
                 switch (r) {
                     case 0 : mast = Mast.CHERVI;break;
-                    case 1 : mast = Mast.BUBI;break;
-                    case 2 : mast = Mast.KRESTI;break;
+                    case 1 : mast = Mast.KRESTI;break;
+                    case 2 : mast = Mast.BUBI;break;
                     case 3 : mast = Mast.PIKI;break;
                 }
             deckMap.put(new CardCoordinate(r, 0), new Card(Rank.ACE, mast));
@@ -156,7 +152,7 @@ public class SingleWindow extends JFrame {
         }
         List<Card> flop = new ArrayList<>();
         for (int i = 0; i < cardPlaces.size(); i++) {
-            flop.add(cardPlaces.get(0).getCard());
+            flop.add(cardPlaces.get(i).getCard());
         }
         CombinationHelper.doMagic(hands,flop);
     }

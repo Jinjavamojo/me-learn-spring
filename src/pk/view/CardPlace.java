@@ -12,16 +12,7 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.util.Map;
 
-/**
- * Copyright 2016 LANIT group.
- * http://www.lanit.ru/
- * <p/>
- * Repository path:    $HeadURL$
- * Last committed:     $Revision$
- * Last changed by:    $Author$
- * Last changed date:  $Date$
- * ID:                 $Id$
- */
+
 public class CardPlace extends JPanel {
 
     private JButton chooser;
