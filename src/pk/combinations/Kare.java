@@ -7,15 +7,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Kare extends CardSet  {
+public class Kare extends CardSet<Kare>  {
 
     public Kare(List<Card> cards) {
         this.cards = new ArrayList<>();
-        cards.addAll(cards);
+        this.cards.addAll(cards);
     }
 
     public Rank getRank() {
         return cards.get(0).getRank();
     }
 
+    @Override
+    public int compareTo(Kare o) {
+        return 0;
+    }
 }

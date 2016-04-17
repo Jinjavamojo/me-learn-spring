@@ -5,7 +5,7 @@ import pk.model.Card;
 import java.util.List;
 
 
-public abstract class CardSet {
+public abstract class CardSet<T> implements Comparable<T> {
 
     protected List<Card> cards;
 

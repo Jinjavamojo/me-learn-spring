@@ -1,6 +1,6 @@
 package pk.model;
 
-public class Card implements Cloneable {
+public class Card implements Cloneable, Comparable<Card> {
 
     private Rank rank;
     private Mast mast;
@@ -55,5 +55,17 @@ public class Card implements Cloneable {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    @Override
+    public int compareTo(Card o) {
+        if (o.getRank().equals(this.getRank()))
+            return 0;
+        if (o.getRank().getValue() > this.getRank().getValue())
+            return -1;
+        else
+            return 1;
+
     }
 }

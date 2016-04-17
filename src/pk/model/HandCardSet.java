@@ -1,23 +1,15 @@
 package pk.model;
 
+import pk.combinations.CardSet;
 import pk.model.Hand;
 
-/**
- * Copyright 2016 LANIT group.
- * http://www.lanit.ru/
- * <p/>
- * Repository path:    $HeadURL$
- * Last committed:     $Revision$
- * Last changed by:    $Author$
- * Last changed date:  $Date$
- * ID:                 $Id$
- */
-public class HandCardSet<T> {
+
+public class HandCardSet<T extends Comparable>  {
 
     private Hand hand;
-    private T someCombination;
+    private CardSet someCombination;
 
-    public HandCardSet(Hand hand, T someCombination) {
+    public HandCardSet(Hand hand, CardSet someCombination) {
         this.hand = hand;
         this.someCombination = someCombination;
     }
@@ -30,11 +22,14 @@ public class HandCardSet<T> {
         this.hand = hand;
     }
 
-    public T getSomeCombination() {
+    public CardSet getSomeCombination() {
         return someCombination;
     }
 
-    public void setSomeCombination(T someCombination) {
+    public void setSomeCombination(CardSet someCombination) {
         this.someCombination = someCombination;
     }
+
+
+
 }

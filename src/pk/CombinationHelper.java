@@ -78,13 +78,30 @@ public class CombinationHelper {
                 }
             }
         }
+
+        //check minor street.
+        Card aceCard = cards.get(cards.size() - 1);
+        streetCards.clear();
+        if (aceCard.getRank() == Rank.ACE) {
+            streetCards.add(cards.get(cards.size()-1));
+            int value = Rank.TWO.getValue();
+            for (int i = 0; i < 4; i++) {
+                Card card1 = cards.get(i);
+                if (card1.getRank().getValue() == value) {
+                    streetCards.add(card1);
+                    value++;
+                } else
+                    return null;
+            }
+            return new Street(streetCards);
+        }
         return null;
     }
 
 
     public static Flush hasFlush(List<Card> cards) {
         int start = 0;
-        int end = 4;
+        int end = 5;
         List<Card> chervi = new ArrayList<>();
         List<Card> bubi = new ArrayList<>();
         List<Card> piki = new ArrayList<>();
@@ -217,25 +234,25 @@ public class CombinationHelper {
                 RoyalFlush royalFlush = CombinationHelper.hasRoyalFlush(cardSet);
 
                 if (pair != null)
-                    combinationsForOneCard.addPair(new HandCardSet<>(hand, pair));
+                    combinationsForOneCard.addPair(new HandCardSet<Pair>(hand, pair));
                 if (twoPairs != null)
-                    combinationsForOneCard.addTwoPair(new HandCardSet<>(hand, twoPairs));
+                    combinationsForOneCard.addTwoPair(new HandCardSet<TwoPairs>(hand, twoPairs));
                 if (triple != null)
-                    combinationsForOneCard.addTriple(new HandCardSet<>(hand, triple));
+                    combinationsForOneCard.addTriple(new HandCardSet<Triple>(hand, triple));
                 if (street != null)
-                    combinationsForOneCard.addStreet(new HandCardSet<>(hand, street));
+                    combinationsForOneCard.addStreet(new HandCardSet<Street>(hand, street));
                 if (flush != null)
                     combinationsForOneCard.addFlush(new HandCardSet<Flush>(hand, flush));
                 if (fullHouse != null)
                     combinationsForOneCard.addFullHouse(new HandCardSet<FullHouse>(hand, fullHouse));
                 if (kare != null)
-                    combinationsForOneCard.addKare(new HandCardSet<>(hand, kare));
+                    combinationsForOneCard.addKare(new HandCardSet<Kare>(hand, kare));
                 if (streetFlush != null)
                     combinationsForOneCard.addStreetFlush(new HandCardSet<StreetFlush>(hand, streetFlush));
                 if (royalFlush != null)
                     combinationsForOneCard.addRoyalFlush(new HandCardSet<RoyalFlush>(hand, royalFlush));
             }
-            allCombs.addAll(combinationsForOneCard.getOnlyBestWinnerCombination());
+            allCombs.add(combinationsForOneCard.getOnlyBestWinnerCombination());
         }
     }
 }

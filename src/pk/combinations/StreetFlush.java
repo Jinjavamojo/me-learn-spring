@@ -6,10 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class StreetFlush extends CardSet {
+public class StreetFlush extends CardSet<StreetFlush> {
 
     public StreetFlush(List<Card> cards) {
         this.cards = new ArrayList<>();
-        cards.addAll(cards);
+        this.cards.addAll(cards);
+    }
+
+    @Override
+    public int compareTo(StreetFlush o) {
+        return 0;
     }
 }

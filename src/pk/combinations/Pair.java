@@ -4,7 +4,7 @@ import pk.model.Card;
 
 import java.util.ArrayList;
 
-public class Pair extends CardSet {
+public class Pair extends CardSet<Pair> {
 
     public final Card card1;
     public final Card card2;
@@ -39,5 +39,14 @@ public class Pair extends CardSet {
 
     public void setHaveEqualPair(boolean haveEqualPair) {
         this.haveEqualPair = haveEqualPair;
+    }
+
+    @Override
+    public int compareTo(Pair o) {
+        if (this.card1.getRank().getValue() > o.getCard1().getRank().getValue())
+            return 1;
+        if (this.card1.getRank().getValue() > o.getCard1().getRank().getValue())
+            return -1;
+        return 0;
     }
 }

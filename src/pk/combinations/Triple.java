@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Triple extends CardSet {
+public class Triple extends CardSet<Triple> {
 
     public final Card card1;
     public final Card card2;
@@ -24,5 +24,12 @@ public class Triple extends CardSet {
         list.add(card2);
         list.add(card3);
         return list;
+    }
+
+    @Override
+    public int compareTo(Triple o) {
+        //enough compare one card 'cause all three cards have some rank
+        return this.card1.compareTo(o.card1);
+
     }
 }
