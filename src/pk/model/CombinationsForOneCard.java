@@ -1,5 +1,6 @@
 package pk.model;
 
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import pk.combinations.*;
 import pk.comparators.PairComparator;
@@ -117,42 +118,51 @@ public class CombinationsForOneCard {
         return pairs;
     }
 
-    public HandCardSet getOnlyBestWinnerCombination() {
+    public Collection<HandCardSet> getOnlyBestWinnerCombination() {
         Collection<HandCardSet> bestHandCardSets = new ArrayList<>();
         if (royalFlush != null) {
-            return royalFlush;
+            bestHandCardSets.add(royalFlush);
+            return bestHandCardSets;
         }
 
-        if (!StringUtils.isEmpty(streetFlushes)) {
-            return getBestFromOneTypeCombinations(streetFlushes);
+        if (!CollectionUtils.isEmpty(streetFlushes)) {
+            bestHandCardSets.addAll(getBestFromOneTypeCombinations(streetFlushes));
+            return bestHandCardSets ;
         }
 
-        if (!StringUtils.isEmpty(kares)) {
-            return getBestFromOneTypeCombinations(kares);
+        if (!CollectionUtils.isEmpty(kares)) {
+            bestHandCardSets.addAll(getBestFromOneTypeCombinations(kares));
+            return bestHandCardSets;
         }
 
-        if (!StringUtils.isEmpty(fullHouses)) {
-            return getBestFromOneTypeCombinations(fullHouses);
+        if (!CollectionUtils.isEmpty(fullHouses)) {
+            bestHandCardSets.addAll(getBestFromOneTypeCombinations(fullHouses));
+            return bestHandCardSets;
         }
 
-        if (!StringUtils.isEmpty(flushes)) {
-            return getBestFromOneTypeCombinations(flushes);
+        if (!CollectionUtils.isEmpty(flushes)) {
+            bestHandCardSets.addAll(getBestFromOneTypeCombinations(flushes));
+            return bestHandCardSets;
         }
-        if (!StringUtils.isEmpty(streets)) {
-            return getBestFromOneTypeCombinations(streets);
+        if (!CollectionUtils.isEmpty(streets)) {
+            bestHandCardSets.addAll(getBestFromOneTypeCombinations(streets));
+            return bestHandCardSets;
         }
 
-        if (!StringUtils.isEmpty(triples)) {
-            return getBestFromOneTypeCombinations(triples);
+        if (!CollectionUtils.isEmpty(triples)) {
+            bestHandCardSets.addAll(getBestFromOneTypeCombinations(triples));
+            return bestHandCardSets;
         }
-        if (!StringUtils.isEmpty(pairs)) {
-            return getBestFromOneTypeCombinations(pairs);
+        if (!CollectionUtils.isEmpty(pairs)) {
+            bestHandCardSets.addAll(getBestFromOneTypeCombinations(pairs));
+            return bestHandCardSets;
         }
         return null;
 
     }
 
-    public HandCardSet getBestFromOneTypeCombinations(List cardSets) {
+    public List<HandCardSet> getBestFromOneTypeCombinations(List cardSets) {
+        List<HandCardSet> bestCardSets = new ArrayList<>();
         HandCardSet resultTriplet = (HandCardSet)cardSets.get(0);
         for (Object o : cardSets) {
             HandCardSet o1 = (HandCardSet)o;
@@ -160,8 +170,12 @@ public class CombinationsForOneCard {
             if (i == -1) {
                 resultTriplet = o1;
             }
+            if (i == 0 && resultTriplet.getSomeCombination() != o1.getSomeCombination()) {
+                bestCardSets.add(o1);
+            }
         }
-        return resultTriplet;
+        bestCardSets.add(resultTriplet);
+        return bestCardSets;
     }
 
 }

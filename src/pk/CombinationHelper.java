@@ -10,8 +10,8 @@ import java.util.*;
 
 public class CombinationHelper {
 
-    private static Comparator<Card> ascRankComparator = new RankComparator(true);
-    private static Comparator<Card> descRankComparator = new RankComparator(false);
+    public static Comparator<Card> ascRankComparator = new RankComparator(true);
+    public static Comparator<Card> descRankComparator = new RankComparator(false);
 
     public static Pair hasPair(List<Card> cards) {
         for (int i = 0; i < cards.size(); i++) {
@@ -181,7 +181,7 @@ public class CombinationHelper {
         if (streetFlush != null) {
             List<Card> streetFlushCards = streetFlush.getCards();
             Collections.sort(streetFlushCards,descRankComparator);
-            if (streetFlushCards.get(0).getRank() == Rank.ACE)
+            if (streetFlushCards.get(0).getRank() == Rank.ACE && streetFlushCards.get(1).getRank() == Rank.KING)
                 return new RoyalFlush(streetFlushCards);
         }
 
@@ -252,7 +252,8 @@ public class CombinationHelper {
                 if (royalFlush != null)
                     combinationsForOneCard.addRoyalFlush(new HandCardSet<RoyalFlush>(hand, royalFlush));
             }
-            allCombs.add(combinationsForOneCard.getOnlyBestWinnerCombination());
+            allCombs.addAll(combinationsForOneCard.getOnlyBestWinnerCombination());
         }
+        int g = 0;
     }
 }
