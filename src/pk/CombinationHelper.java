@@ -25,29 +25,50 @@ public class CombinationHelper {
             }
         }
         if (canFindPairInTurn) {
-            for (int i = 0; i < turn.size(); i++) {
-                Card card1 = turn.get(i);
-                for (int j = i + 1; j < turn.size(); j++) {
-                    Card card2 = turn.get(j);
-                    if (card1.getRank().equals(card2.getRank())) {
-                        return new Pair(card1, card2);
-                    }
-                }
-            }
+            return findPairInTurn(turn);
         }
         return null;
     }
 
-    public static TwoPairs hasTwoPairs(List<Card> playerCards, List<Card> turn) {
-        Pair pair = hasPair(playerCards,turn, true);
-        if (pair != null) {
-            ArrayList<Card> cloned = new ArrayList<>(cards);
-            cloned.remove(pair.card1);
-            cloned.remove(pair.card2);
-            Pair secondPair = hasPair(cloned);
-            if (secondPair != null) {
-                return new TwoPairs(pair, secondPair);
+    private static Pair findPairInTurn(List<Card> turn) {
+        for (int i = 0; i < turn.size(); i++) {
+            Card card1 = turn.get(i);
+            for (int j = i + 1; j < turn.size(); j++) {
+                Card card2 = turn.get(j);
+                if (card1.getRank().equals(card2.getRank())) {
+                    return new Pair(card1, card2);
+                }
             }
+        }
+        return null;
+
+    }
+
+    //can be 1+1 and 1+1
+    //can be 2 + 2
+    public static TwoPairs hasTwoPairs(List<Card> playerCards, List<Card> turn) {
+        Rank rank = playerCards.get(0).getRank();
+        if (rank.getValue() == playerCards.get(1).getRank().getValue()) {
+            //then 2+2 and we find second pair in turn.
+            Pair pairInTurn = findPairInTurn(turn);
+            if (pairInTurn != null)
+                return new TwoPairs(new Pair(playerCards.get(0),playerCards.get(1)),pairInTurn);
+        } else {
+            //then 1+1 and 1+1 we find
+            Pair one = null;
+            Pair two = null;
+            for (Card card : turn) {
+                if (playerCards.get(0).getRank().getValue() == card.getRank().getValue()) {
+                    one = new Pair(playerCards.get(0),card);
+                }
+                if (playerCards.get(1).getRank().getValue() == card.getRank().getValue()) {
+                    two = new Pair(playerCards.get(1),card);
+                }
+            }
+            if (one != null && two != null) {
+                return new TwoPairs(one, two);
+            }
+
         }
         return null;
     }
@@ -55,7 +76,7 @@ public class CombinationHelper {
     //can be 1 + 2
     //can be 2 + 1
     //can be 0 + 3 - need only by full house
-    public static Triple hasTriple(List<Card> playerCards, List<Card> turn, boolean canFindTripleInTurn) {
+    public static Triple hasTriple(List<Card> playerCards, List<Card> turn) {
         Rank rank = playerCards.get(0).getRank();
         List<Card> result = new ArrayList<>();
         result.add(playerCards.get(0));
@@ -160,17 +181,45 @@ public class CombinationHelper {
         return null;
     }
 
-    public static FullHouse hasFullHouse(List<Card> cardLis) {
-        List<Card> c = new ArrayList<>(cardLis);
-        Pair pair = hasPair(c);
-        if (pair == null)
-            return null;
-        c.removeAll(pair.getCards());
-        Triple triple = hasTriple(c);
-        if (triple != null)
-            return new FullHouse(pair, triple);
-        return null;
 
+    //can be pair in hand and triple in turn
+    //can be 1+1 pair, 1+2 triple
+    //can be 2+1 triple + pair in turn
+    public static FullHouse hasFullHouse(List<Card> playerCards, List<Card> turn) {
+        if (playerCards.get(0).getRank().getValue() == playerCards.get(1).getRank().getValue()) {
+            //we have pair. then find or 1 card for triple or 3 to triple
+            Triple triple = null;
+            for (Card card : turn) {
+                if (card.getRank().getValue() == playerCards.get(0).getRank().getValue()) {
+                    List<Card> tripleCards = new ArrayList<>(playerCards);
+                    tripleCards.add(card);
+                    triple = new Triple(tripleCards);
+                }
+            }
+            if (triple != null)
+                return new FullHouse(new Pair(playerCards.get(0),playerCards.get(1)),triple);
+        } else {
+            //we find 1 card to pair of first player card. and 2 card to triplet of second player card or
+            List<Card> l1 = new ArrayList<>();
+            List<Card> l2 = new ArrayList<>();
+            l1.add(playerCards.get(0));
+            l2.add(playerCards.get(1));
+            for (Card card : turn) {
+                if (playerCards.get(0).getRank().getValue() == card.getRank().getValue()) {
+                    l1.add(card);
+                }
+                if (playerCards.get(1).getRank().getValue() == card.getRank().getValue()) {
+                    l2.add(card);
+                }
+            }
+            if (l1.size() == 2 && l2.size() == 3) {
+                return new FullHouse(new Pair(l1.get(0),l1.get(1)),new Triple(l2));
+            }
+            if (l1.size() == 3 && l2.size() == 2) {
+                return new FullHouse(new Pair(l2.get(0),l2.get(1)),new Triple(l1));
+            }
+        }
+        return null;
     }
 
 
