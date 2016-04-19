@@ -28,7 +28,7 @@ public class Hand {
         secondCard = c2;
     }
 
-    public Collection<Card> getCards() {
+    public List<Card> getCards() {
             List<Card> cards = new ArrayList<>();
             cards.add(firstCard.clone());
             cards.add(secondCard.clone());

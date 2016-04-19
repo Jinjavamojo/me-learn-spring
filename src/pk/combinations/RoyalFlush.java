@@ -14,6 +14,6 @@ public class RoyalFlush extends CardSet<RoyalFlush> {
 
     @Override
     public int compareTo(RoyalFlush o) {
-        return 0;
+        throw new UnsupportedOperationException();
     }
 }

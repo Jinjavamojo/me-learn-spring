@@ -1,5 +1,6 @@
 package pk.combinations;
 
+import com.sun.istack.internal.NotNull;
 import org.springframework.util.CollectionUtils;
 import pk.CombinationHelper;
 import pk.comparators.RankComparator;
@@ -22,9 +23,14 @@ public class Flush extends CardSet<Flush> {
         Comparator<Card> rankComp = CombinationHelper.descRankComparator;
         Collections.sort(this.cards, rankComp);
         Collections.sort(o.cards, rankComp);
-        for (Card ownCard : this.cards) {
-
-
+        for (int i = 0; i < 5; i++) {
+            if (this.cards.get(i).getRank().getValue() > o.getCards().get(i).getRank().getValue()) {
+                return 1;
+            }
+            if (this.cards.get(i).getRank().getValue() < o.getCards().get(i).getRank().getValue()) {
+                return -1;
+            }
         }
+        throw new RuntimeException("someting is gonna wrong: two equals flush combinations");
     }
 }

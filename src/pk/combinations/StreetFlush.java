@@ -15,6 +15,6 @@ public class StreetFlush extends CardSet<StreetFlush> {
 
     @Override
     public int compareTo(StreetFlush o) {
-        return 0;
+        throw new UnsupportedOperationException();
     }
 }

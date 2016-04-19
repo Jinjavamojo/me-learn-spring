@@ -20,6 +20,10 @@ public class Kare extends CardSet<Kare>  {
 
     @Override
     public int compareTo(Kare o) {
-        return 0;
+        if (this.cards.get(0).getRank().getValue() > o.cards.get(0).getRank().getValue())
+            return 1;
+        if (this.cards.get(0).getRank().getValue() < o.cards.get(0).getRank().getValue())
+            return -1;
+        throw  new RuntimeException("");
     }
 }

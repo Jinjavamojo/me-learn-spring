@@ -1,5 +1,6 @@
 package pk;
 
+import com.sun.istack.internal.Nullable;
 import pk.combinations.*;
 import pk.comparators.DeckComparator;
 import pk.comparators.RankComparator;
@@ -13,21 +14,32 @@ public class CombinationHelper {
     public static Comparator<Card> ascRankComparator = new RankComparator(true);
     public static Comparator<Card> descRankComparator = new RankComparator(false);
 
-    public static Pair hasPair(List<Card> cards) {
-        for (int i = 0; i < cards.size(); i++) {
-            Card card1 = cards.get(i);
-            for (int j = i + 1; j < cards.size(); j++) {
-                Card card2 = cards.get(j);
-                if (card1.getRank().equals(card2.getRank())) {
-                    return new Pair(card1, card2);
+    public static Pair hasPair(@Nullable List<Card> playerCards, List<Card> turn, boolean canFindPairInTurn) {
+        if (playerCards != null) {
+            Collections.sort(playerCards,descRankComparator);
+            for (Card playerCard : playerCards) {
+                for (Card card : turn) {
+                    if (playerCard.getRank().getValue() == card.getRank().getValue())
+                        return new Pair(playerCard, card);
+                }
+            }
+        }
+        if (canFindPairInTurn) {
+            for (int i = 0; i < turn.size(); i++) {
+                Card card1 = turn.get(i);
+                for (int j = i + 1; j < turn.size(); j++) {
+                    Card card2 = turn.get(j);
+                    if (card1.getRank().equals(card2.getRank())) {
+                        return new Pair(card1, card2);
+                    }
                 }
             }
         }
         return null;
     }
 
-    public static TwoPairs hasTwoPairs(List<Card> cards) {
-        Pair pair = hasPair(cards);
+    public static TwoPairs hasTwoPairs(List<Card> playerCards, List<Card> turn) {
+        Pair pair = hasPair(playerCards,turn, true);
         if (pair != null) {
             ArrayList<Card> cloned = new ArrayList<>(cards);
             cloned.remove(pair.card1);
@@ -40,16 +52,31 @@ public class CombinationHelper {
         return null;
     }
 
-    public static Triple hasTriple(List<Card> cards) {
-        Pair pair = hasPair(cards);
-        if (pair == null)
-            return null;
-        ArrayList<Card> cloned = new ArrayList<>(cards);
-        cloned.remove(pair.card1);
-        cloned.remove(pair.card2);
-        Card card = containRank(pair.card1.getRank(), cloned);
-        if (card != null) {
-            return new Triple(pair.card1, pair.card2, card);
+    //can be 1 + 2
+    //can be 2 + 1
+    //can be 0 + 3 - need only by full house
+    public static Triple hasTriple(List<Card> playerCards, List<Card> turn, boolean canFindTripleInTurn) {
+        Rank rank = playerCards.get(0).getRank();
+        List<Card> result = new ArrayList<>();
+        result.add(playerCards.get(0));
+        if (rank.getValue() == playerCards.get(1).getRank().getValue()) {
+            //then we have pair and find third card in turn
+            result.add(playerCards.get(1));
+            for (Card card : turn) {
+                if (card.getRank().getValue() == rank.getValue()) {
+                    result.add(card);
+                    return new Triple(result);
+                }
+            }
+        } else {
+            //then find two cards with same rank
+            for (Card card : turn) {
+                if (card.getRank().getValue() == rank.getValue()) {
+                    result.add(card);
+                }
+            }
+            if (result.size() == 3)
+                return new Triple(result);
         }
         return null;
     }
@@ -146,18 +173,43 @@ public class CombinationHelper {
 
     }
 
-    public static Kare hasKare(List<Card> cards) {
-        Triple triple = hasTriple(cards);
-        if (triple != null) {
-            ArrayList<Card> temp = new ArrayList<Card>(cards);
-            temp.removeAll(triple.getList());
-            Card fourthCard = containRank(triple.card1.getRank(), temp);
-            if (fourthCard != null) {
-                ArrayList<Card> kareList = new ArrayList<Card>(triple.getList());
-                kareList.add(fourthCard);
-                return new Kare(kareList);
+
+    //can be care at turn (4 of 5)
+    //can be care at player cards + turn.  (1+3 or 2+2)
+    // We accept only player cards + turn cards
+    public static Kare hasKare(List<Card> playerCards, List<Card> turn) {
+
+        //1. player have pair + 2 cards on turn.
+        List<Card> kare = new ArrayList<>();
+        Card playerCard = playerCards.get(0);
+        kare.add(playerCard);
+        for (Card card : turn) {
+            if (playerCard.getRank().getValue() == card.getRank().getValue())
+                kare.add(card);
+        }
+        if (kare.size() == 4)
+            return new Kare(kare);
+        kare.clear();
+        playerCard = playerCards.get(1);
+        for (Card card : turn) {
+            if (playerCard.getRank().getValue() == card.getRank().getValue())
+                kare.add(card);
+        }
+        if (kare.size() == 4)
+            return new Kare(kare);
+
+        //2. player have 1 card + 3 card on turn.
+        kare.clear();
+        if (playerCards.get(0).getRank().getValue() == playerCards.get(1).getRank().getValue()) {
+            kare.add(playerCards.get(0));
+            kare.add(playerCards.get(1));
+            for (Card card: turn) {
+                if (playerCard.getRank().getValue() == card.getRank().getValue())
+                    kare.add(card);
             }
         }
+        if (kare.size() == 4)
+            return new Kare(kare);
         return null;
     }
 
@@ -220,18 +272,17 @@ public class CombinationHelper {
         for (Card card : deck) {
             CombinationsForOneCard combinationsForOneCard = new CombinationsForOneCard();
             for (Hand hand : hands) {
-                ArrayList<Card> cardSet = new ArrayList<>(hand.getCards());
-                cardSet.addAll(flop);
-                cardSet.add(card);
-                Pair pair = CombinationHelper.hasPair(cardSet);
+                flop.add(card);
+                Pair pair = CombinationHelper.hasPair(hand.getCards(),flop);
                 TwoPairs twoPairs = CombinationHelper.hasTwoPairs(cardSet);
                 Triple triple = CombinationHelper.hasTriple(cardSet);
                 Street street = CombinationHelper.hasStreet(cardSet);
                 Flush flush = CombinationHelper.hasFlush(cardSet);
                 FullHouse fullHouse = CombinationHelper.hasFullHouse(cardSet);
-                Kare kare = CombinationHelper.hasKare(cardSet);
+                Kare kare = CombinationHelper.hasKare(hand.getCards(),flop);
                 StreetFlush streetFlush = CombinationHelper.hasStreetFlush(cardSet);
                 RoyalFlush royalFlush = CombinationHelper.hasRoyalFlush(cardSet);
+                flop.remove(card);
 
                 if (pair != null)
                     combinationsForOneCard.addPair(new HandCardSet<Pair>(hand, pair));

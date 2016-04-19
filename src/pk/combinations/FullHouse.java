@@ -3,8 +3,8 @@ package pk.combinations;
 
 public class FullHouse extends CardSet<FullHouse> {
 
-    Triple triple;
-    Pair pair;
+    private Triple triple;
+    private Pair pair;
 
     public FullHouse(Pair pair, Triple triple) {
         this.pair = pair;
@@ -13,6 +13,26 @@ public class FullHouse extends CardSet<FullHouse> {
 
     @Override
     public int compareTo(FullHouse o) {
-        return 0;
+        int i = this.triple.compareTo(o.getTriple());
+        if (i != 0) {
+            return i;
+        }
+        return this.pair.compareTo(o.getPair());
+    }
+
+    public Triple getTriple() {
+        return triple;
+    }
+
+    public void setTriple(Triple triple) {
+        this.triple = triple;
+    }
+
+    public Pair getPair() {
+        return pair;
+    }
+
+    public void setPair(Pair pair) {
+        this.pair = pair;
     }
 }
