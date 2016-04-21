@@ -45,7 +45,7 @@ public class Pair extends CardSet<Pair> {
     public int compareTo(Pair o) {
         if (this.card1.getRank().getValue() > o.getCard1().getRank().getValue())
             return 1;
-        if (this.card1.getRank().getValue() > o.getCard1().getRank().getValue())
+        if (this.card1.getRank().getValue() < o.getCard1().getRank().getValue())
             return -1;
         return 0;
     }

@@ -16,6 +16,8 @@ public class CombinationHelper {
 
     public static Pair hasPair(@Nullable List<Card> playerCards, List<Card> turn, boolean canFindPairInTurn) {
         if (playerCards != null) {
+            if (playerCards.get(0).getRank() == playerCards.get(1).getRank())
+                return new Pair(playerCards.get(0),playerCards.get(1));
             Collections.sort(playerCards,descRankComparator);
             for (Card playerCard : playerCards) {
                 for (Card card : turn) {
@@ -46,7 +48,9 @@ public class CombinationHelper {
 
     //can be 1+1 and 1+1
     //can be 2 + 2
+    //can be 1+1 and 2
     public static TwoPairs hasTwoPairs(List<Card> playerCards, List<Card> turn) {
+        Collections.sort(turn, descRankComparator);
         Rank rank = playerCards.get(0).getRank();
         if (rank.getValue() == playerCards.get(1).getRank().getValue()) {
             //then 2+2 and we find second pair in turn.
@@ -68,8 +72,26 @@ public class CombinationHelper {
             if (one != null && two != null) {
                 return new TwoPairs(one, two);
             }
-
         }
+
+        //can be 1+1 and 2
+        Pair pair = null;
+        for (Card turnCard : turn) {
+            if (playerCards.get(0).getRank().getValue() == turnCard.getRank().getValue()) {
+                pair = new Pair(playerCards.get(0),turnCard);
+            }
+            if (playerCards.get(1).getRank().getValue() == turnCard.getRank().getValue()) {
+                pair = new Pair(playerCards.get(1),turnCard);
+            }
+        }
+        //we find second pair in turn
+        if (pair != null) {
+            Pair pairInTurn = findPairInTurn(turn);
+            if (pairInTurn != null) {
+                return new TwoPairs(pair, pairInTurn);
+            }
+        }
+
         return null;
     }
 
@@ -104,57 +126,83 @@ public class CombinationHelper {
 
 
 
-    public static Street hasStreet(List<Card> cards) {
+    public static Street hasStreet(List<Card> playerCards, List<Card> river) {
+        Street street = null;
+        List<Card> allCards = new ArrayList<>(playerCards);
+        allCards.addAll(river);
         List<Card> streetCards = new ArrayList<>();
         List<Rank> ranks = Arrays.asList(Rank.values());
-        Collections.sort(cards, ascRankComparator);
-        for (int i = 0; i < cards.size(); i++) { //loop each card as start
+        Collections.sort(allCards, ascRankComparator);
+        for (int i = 0; i < allCards.size() && street == null; i++) { //loop each card as start
             streetCards.clear();
-            Card firstCard = cards.get(i);
+            Card firstCard = allCards.get(i);
             streetCards.add(firstCard);
             int rankIndexOfNextCard = firstCard.getRank().getValue() - 1;
-            for (int j = 0; j < cards.size(); j++) {
-                Card card = cards.get(j);
+            for (int j = 0; j < allCards.size() && street == null; j++) {
+                Card card = allCards.get(j);
                 if (rankIndexOfNextCard <= ranks.size()-1) {
                     if (card.getRank().equals(ranks.get(rankIndexOfNextCard))) {
                         rankIndexOfNextCard++;
                         streetCards.add(card);
                     }
                     if (streetCards.size() == 5) {
-                        return new Street(streetCards);
+                        street = new Street(streetCards);
                     }
                 }
             }
         }
 
-        //check minor street.
-        Card aceCard = cards.get(cards.size() - 1);
-        streetCards.clear();
-        if (aceCard.getRank() == Rank.ACE) {
-            streetCards.add(cards.get(cards.size()-1));
-            int value = Rank.TWO.getValue();
-            for (int i = 0; i < 4; i++) {
-                Card card1 = cards.get(i);
-                if (card1.getRank().getValue() == value) {
-                    streetCards.add(card1);
-                    value++;
-                } else
-                    return null;
+        if (street == null) {
+            //check minor street.
+            Card aceCard = allCards.get(allCards.size() - 1);
+            streetCards.clear();
+            if (aceCard.getRank() == Rank.ACE) {
+                streetCards.add(allCards.get(allCards.size()-1));
+                int value = Rank.TWO.getValue();
+                for (int i = 0; i < 4; i++) {
+                    Card card1 = allCards.get(i);
+                    if (card1.getRank().getValue() == value) {
+                        streetCards.add(card1);
+                        value++;
+                    } else
+                        return null;
+                }
+                street = new Street(streetCards);
             }
-            return new Street(streetCards);
         }
-        return null;
+        //check is street contains not only river cards
+        if (street != null && isAllCardExisted(streetCards, river,5)) {
+            return null;
+        }
+        return street;
+    }
+
+    private static boolean isAllCardExisted(List<Card> cards, List<Card> river, int howMathEqualsNeed){
+        int i = 0;
+        for (Card streetCard : cards) {
+            for (Card card : river) {
+                if (streetCard.equals(card))
+                    i++;
+            }
+        }
+        if (i == howMathEqualsNeed) {
+            return true;
+        }
+        return false;
     }
 
 
-    public static Flush hasFlush(List<Card> cards) {
+    public static Flush hasFlush(List<Card> cards, List<Card> river) {
+        Flush flush= null;
         int start = 0;
         int end = 5;
+        List<Card> allCards = new ArrayList<>(cards);
+        allCards.addAll(river);
         List<Card> chervi = new ArrayList<>();
         List<Card> bubi = new ArrayList<>();
         List<Card> piki = new ArrayList<>();
         List<Card> kresti = new ArrayList<>();
-        for (Card card : cards) {
+        for (Card card : allCards) {
             switch (card.getMast()) {
                 case CHERVI: chervi.add(card);break;
                 case BUBI: bubi.add(card);break;
@@ -164,21 +212,25 @@ public class CombinationHelper {
         }
         if (chervi.size() >= 5) {
             Collections.sort(chervi,new RankComparator(false));
-            return new Flush(chervi.subList(start,end));
+            flush=  new Flush(chervi.subList(start,end));
         }
         if (bubi.size() >=5) {
             Collections.sort(bubi,new RankComparator(false));
-            return new Flush(bubi.subList(start,end));
+            flush = new Flush(bubi.subList(start,end));
         }
         if (kresti.size() >=5) {
             Collections.sort(kresti,new RankComparator(false));
-            return new Flush(kresti.subList(start,end));
+            flush = new Flush(kresti.subList(start,end));
         }
         if (piki.size() >=5) {
             Collections.sort(piki,new RankComparator(false));
-            return new Flush(piki.subList(start,end));
+            flush = new Flush(piki.subList(start,end));
         }
-        return null;
+        //check is street contains not only river cards
+        if (flush != null && isAllCardExisted(cards, river,5)) {
+            return null;
+        }
+        return flush;
     }
 
 
@@ -228,42 +280,52 @@ public class CombinationHelper {
     // We accept only player cards + turn cards
     public static Kare hasKare(List<Card> playerCards, List<Card> turn) {
 
+        Kare kare = null;
         //1. player have pair + 2 cards on turn.
-        List<Card> kare = new ArrayList<>();
+        List<Card> kareCards = new ArrayList<>();
         Card playerCard = playerCards.get(0);
-        kare.add(playerCard);
+        kareCards.add(playerCard);
         for (Card card : turn) {
             if (playerCard.getRank().getValue() == card.getRank().getValue())
-                kare.add(card);
+                kareCards.add(card);
         }
-        if (kare.size() == 4)
-            return new Kare(kare);
-        kare.clear();
-        playerCard = playerCards.get(1);
-        for (Card card : turn) {
-            if (playerCard.getRank().getValue() == card.getRank().getValue())
-                kare.add(card);
-        }
-        if (kare.size() == 4)
-            return new Kare(kare);
+        if (kareCards.size() == 4)
+            kare =  new Kare(kareCards);
 
-        //2. player have 1 card + 3 card on turn.
-        kare.clear();
-        if (playerCards.get(0).getRank().getValue() == playerCards.get(1).getRank().getValue()) {
-            kare.add(playerCards.get(0));
-            kare.add(playerCards.get(1));
-            for (Card card: turn) {
+        //lets finding by second card
+        if (kare == null) {
+            kareCards.clear();
+            playerCard = playerCards.get(1);
+            for (Card card : turn) {
                 if (playerCard.getRank().getValue() == card.getRank().getValue())
-                    kare.add(card);
+                    kareCards.add(card);
+            }
+            if (kareCards.size() == 4)
+                kare =  new Kare(kareCards);
+            if (kare == null) {
+                //2. player have 1 card + 3 card on turn.
+                kareCards.clear();
+                if (playerCards.get(0).getRank().getValue() == playerCards.get(1).getRank().getValue()) {
+                    kareCards.add(playerCards.get(0));
+                    kareCards.add(playerCards.get(1));
+                    for (Card card: turn) {
+                        if (playerCard.getRank().getValue() == card.getRank().getValue())
+                            kareCards.add(card);
+                    }
+                }
             }
         }
-        if (kare.size() == 4)
-            return new Kare(kare);
-        return null;
+
+        if (kareCards.size() == 4 || kare != null) {
+            if (isAllCardExisted(kareCards,turn,4))
+                return null;
+            return new Kare(kareCards);
+        }
+        return kare;
     }
 
-    public static StreetFlush hasStreetFlush(List<Card> cards) {
-        Street street = hasStreet(cards);
+    public static StreetFlush hasStreetFlush(List<Card> playerCards, List<Card> turn) {
+        Street street = hasStreet(playerCards, turn);
         if (street != null) {
             List<Card> streetCards = street.getCards();
             Mast streetMast = streetCards.get(0).getMast();
@@ -277,8 +339,8 @@ public class CombinationHelper {
 
     }
 
-    public static RoyalFlush hasRoyalFlush(List<Card> cardLis) {
-        StreetFlush streetFlush = hasStreetFlush(cardLis);
+    public static RoyalFlush hasRoyalFlush(List<Card> playerCards, List<Card> turn) {
+        StreetFlush streetFlush = hasStreetFlush(playerCards, turn);
         if (streetFlush != null) {
             List<Card> streetFlushCards = streetFlush.getCards();
             Collections.sort(streetFlushCards,descRankComparator);
@@ -322,15 +384,15 @@ public class CombinationHelper {
             CombinationsForOneCard combinationsForOneCard = new CombinationsForOneCard();
             for (Hand hand : hands) {
                 flop.add(card);
-                Pair pair = CombinationHelper.hasPair(hand.getCards(),flop);
-                TwoPairs twoPairs = CombinationHelper.hasTwoPairs(cardSet);
-                Triple triple = CombinationHelper.hasTriple(cardSet);
-                Street street = CombinationHelper.hasStreet(cardSet);
-                Flush flush = CombinationHelper.hasFlush(cardSet);
-                FullHouse fullHouse = CombinationHelper.hasFullHouse(cardSet);
+                Pair pair = CombinationHelper.hasPair(hand.getCards(),flop, false);
+                TwoPairs twoPairs = CombinationHelper.hasTwoPairs(hand.getCards(), flop);
+                Triple triple = CombinationHelper.hasTriple(hand.getCards(),flop);
+                Street street = CombinationHelper.hasStreet(hand.getCards(),flop);
+                Flush flush = CombinationHelper.hasFlush(hand.getCards(),flop);
+                FullHouse fullHouse = CombinationHelper.hasFullHouse(hand.getCards(),flop);
                 Kare kare = CombinationHelper.hasKare(hand.getCards(),flop);
-                StreetFlush streetFlush = CombinationHelper.hasStreetFlush(cardSet);
-                RoyalFlush royalFlush = CombinationHelper.hasRoyalFlush(cardSet);
+                StreetFlush streetFlush = CombinationHelper.hasStreetFlush(hand.getCards(),flop);
+                RoyalFlush royalFlush = CombinationHelper.hasRoyalFlush(hand.getCards(),flop);
                 flop.remove(card);
 
                 if (pair != null)

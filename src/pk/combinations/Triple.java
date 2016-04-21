@@ -16,7 +16,7 @@ public class Triple extends CardSet<Triple> {
     @Override
     public int compareTo(Triple o) {
         //enough compare one card 'cause all three cards have some rank
-        return this.card1.compareTo(o.card1);
+        return this.getCards().get(0).getRank().compareTo(o.getCards().get(0).getRank());
 
     }
 }

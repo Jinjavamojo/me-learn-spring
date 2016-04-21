@@ -17,18 +17,48 @@ public class AllCompareTests extends Assert {
         SingleWindow w = new SingleWindow();
     }
 
+    //tested
     @Test
     public void hasKareSets() {
-        List<Card> c1 = new ArrayList<>();
-        c1.add(new Card(Rank.JACK, Mast.PIKI));
-        c1.add(new Card(Rank.JACK, Mast.BUBI));
-        c1.add(new Card(Rank.JACK, Mast.KRESTI));
-        c1.add(new Card(Rank.JACK, Mast.CHERVI));
-        c1.add(new Card(Rank.ACE, Mast.CHERVI));
-        Triple triple = CombinationHelper.hasTriple(c1);
-        Kare kare = CombinationHelper.hasKare(c1);
-        assertNotNull(triple);
-        assertNotNull(kare);
+        //can be care at turn (4 of 5)
+        Hand hand1 = new Hand(1);
+        Hand hand2 = new Hand(2);
+        hand1.initializeCards(new Card(Rank.TWO, Mast.CHERVI), new Card(Rank.JACK, Mast.PIKI));
+        hand2.initializeCards(new Card(Rank.THREE, Mast.KRESTI), new Card(Rank.TEN, Mast.PIKI));
+        List<Card> turn = new ArrayList<>();
+        turn.add(new Card(Rank.JACK, Mast.PIKI));
+        turn.add(new Card(Rank.JACK, Mast.BUBI));
+        turn.add(new Card(Rank.JACK, Mast.KRESTI));
+        turn.add(new Card(Rank.JACK, Mast.CHERVI));
+        turn.add(new Card(Rank.ACE, Mast.CHERVI));
+        Kare kare1 = CombinationHelper.hasKare(hand1.getCards(),turn);
+        Kare kare2 = CombinationHelper.hasKare(hand2.getCards(),turn);
+        assertNull(kare1);
+        assertNull(kare2);
+
+        //1+3
+        hand1 = new Hand(1);
+        hand1.initializeCards(new Card(Rank.KING, Mast.CHERVI), new Card(Rank.TWO, Mast.PIKI));
+        turn = new ArrayList<>();
+        turn.add(new Card(Rank.KING, Mast.PIKI));
+        turn.add(new Card(Rank.KING, Mast.BUBI));
+        turn.add(new Card(Rank.KING, Mast.KRESTI));
+        turn.add(new Card(Rank.TWO, Mast.CHERVI));
+        turn.add(new Card(Rank.FOUR, Mast.CHERVI));
+         kare1 = CombinationHelper.hasKare(hand1.getCards(),turn);
+        assertNotNull(kare1);
+
+        //2+2
+        hand1 = new Hand(1);
+        hand1.initializeCards(new Card(Rank.KING, Mast.CHERVI), new Card(Rank.KING, Mast.PIKI));
+        turn = new ArrayList<>();
+        turn.add(new Card(Rank.ACE, Mast.PIKI));
+        turn.add(new Card(Rank.KING, Mast.BUBI));
+        turn.add(new Card(Rank.KING, Mast.KRESTI));
+        turn.add(new Card(Rank.ACE, Mast.CHERVI));
+        turn.add(new Card(Rank.FOUR, Mast.CHERVI));
+        kare1 = CombinationHelper.hasKare(hand1.getCards(),turn);
+        assertNotNull(kare1);
     }
 
 //    @Test
@@ -45,36 +75,50 @@ public class AllCompareTests extends Assert {
 //        assertNotNull(pairs2);
 //    }
 
-
+    //todo completed
     @Test
     public void hasStreet() {
+        //test minor street, A 2 3 4 5
+        Hand hand1 = new Hand(1);
+        hand1.initializeCards(new Card(Rank.TWO, Mast.CHERVI), new Card(Rank.ACE, Mast.PIKI));
         List<Card> c1 = new ArrayList<>();
-        c1.add(new Card(Rank.TWO, Mast.PIKI));
-        c1.add(new Card(Rank.ACE, Mast.PIKI));
-        c1.add(new Card(Rank.SIX, Mast.BUBI));
+        c1.add(new Card(Rank.QUEEN, Mast.BUBI));
         c1.add(new Card(Rank.FIVE, Mast.KRESTI));
         c1.add(new Card(Rank.THREE, Mast.CHERVI));
         c1.add(new Card(Rank.FOUR, Mast.CHERVI));
-        Street street = CombinationHelper.hasStreet(c1);
+        Street street = CombinationHelper.hasStreet(hand1.getCards(), c1);
         assertNotNull(street);
+        //test usual street, 9 10 J Q K
         List<Card> c2 = new ArrayList<>();
-        c2.add(new Card(Rank.QUEEN, Mast.PIKI));
-        c2.add(new Card(Rank.TEN, Mast.BUBI));
+        hand1.initializeCards(new Card(Rank.QUEEN, Mast.PIKI), new Card(Rank.TEN, Mast.BUBI));
         c2.add(new Card(Rank.JACK, Mast.KRESTI));
         c2.add(new Card(Rank.TEN, Mast.CHERVI));
         c2.add(new Card(Rank.NINE, Mast.CHERVI));
         c2.add(new Card(Rank.KING, Mast.CHERVI));
-        Street street2 = CombinationHelper.hasStreet(c2);
+        Street street2 = CombinationHelper.hasStreet(hand1.getCards(), c2);
         assertNotNull(street2);
+        //test not street
         List<Card> c3 = new ArrayList<>();
-        c3.add(new Card(Rank.QUEEN, Mast.PIKI));
-        c3.add(new Card(Rank.TEN, Mast.BUBI));
+        hand1.initializeCards(new Card(Rank.QUEEN, Mast.PIKI), new Card(Rank.JACK, Mast.BUBI));
         c3.add(new Card(Rank.JACK, Mast.KRESTI));
         c3.add(new Card(Rank.TEN, Mast.CHERVI));
         c3.add(new Card(Rank.NINE, Mast.CHERVI));
         c3.add(new Card(Rank.ACE, Mast.CHERVI));
-        Street street3 = CombinationHelper.hasStreet(c3);
+        Street street3 = CombinationHelper.hasStreet(hand1.getCards(), c3);
         assertNull(street3);
+
+
+        c3 = new ArrayList<>();
+        hand1.initializeCards(new Card(Rank.QUEEN, Mast.PIKI), new Card(Rank.JACK, Mast.BUBI));
+        c3.add(new Card(Rank.TWO, Mast.KRESTI));
+        c3.add(new Card(Rank.THREE, Mast.CHERVI));
+        c3.add(new Card(Rank.FOUR, Mast.CHERVI));
+        c3.add(new Card(Rank.FIVE, Mast.CHERVI));
+        c3.add(new Card(Rank.SIX, Mast.CHERVI));
+        Street street4 = CombinationHelper.hasStreet(hand1.getCards(), c3);
+        assertNull(street4);
+
+
     }
 
 
@@ -98,13 +142,13 @@ public class AllCompareTests extends Assert {
 
     }
 
+    //todo completed
     @Test
     public void compareTwoPairs() {
         Hand hand1 = new Hand(1);
         Hand hand2 = new Hand(2);
-        List<Card> river = new ArrayList<>();
 
-        //initialize 4 card
+        List<Card> river = new ArrayList<>();
         river.add(new Card(Rank.TWO, Mast.PIKI));
         river.add(new Card(Rank.ACE, Mast.KRESTI));
         river.add(new Card(Rank.THREE, Mast.BUBI));
@@ -115,15 +159,15 @@ public class AllCompareTests extends Assert {
         hand1.initializeCards(new Card(Rank.TWO, Mast.CHERVI), new Card(Rank.JACK, Mast.PIKI));
         hand2.initializeCards(new Card(Rank.THREE, Mast.KRESTI), new Card(Rank.TEN, Mast.PIKI));
 
-        List<Card> c1 = new ArrayList<>(river);
-        c1.addAll(hand1.getCards());
-        List<Card> c2 = new ArrayList<>(river);
-        c2.addAll(hand2.getCards());
-        TwoPairs twoPairs1 = CombinationHelper.hasTwoPairs(c1);
-        TwoPairs twoPairs2 = CombinationHelper.hasTwoPairs(c2);
+        TwoPairs twoPairs1 = CombinationHelper.hasTwoPairs(hand1.getCards(), river);
+        TwoPairs twoPairs2 = CombinationHelper.hasTwoPairs(hand2.getCards(), river);
+        assertNotNull(twoPairs1);
+        assertNotNull(twoPairs2);
         int i = twoPairs1.compareTo(twoPairs2);
         int i2 = twoPairs2.compareTo(twoPairs1);
-        assertEquals(i,1);
+
+        //test 2+2 and J+J > 3+3 and 10+10
+        assertEquals(i, 1);
         assertEquals(i2, -1);
 
         river.clear();
@@ -135,12 +179,30 @@ public class AllCompareTests extends Assert {
 
         hand1.initializeCards(new Card(Rank.TWO, Mast.CHERVI), new Card(Rank.KING, Mast.PIKI));
         hand2.initializeCards(new Card(Rank.THREE, Mast.KRESTI), new Card(Rank.TEN, Mast.PIKI));
-        c1 = new ArrayList<>(river);
-        c1.addAll(hand1.getCards());
-        c2 = new ArrayList<>(river);
-        c2.addAll(hand2.getCards());
-        twoPairs1 = CombinationHelper.hasTwoPairs(c1);
-        twoPairs2 = CombinationHelper.hasTwoPairs(c2);
+        twoPairs1 = CombinationHelper.hasTwoPairs(hand1.getCards(), river);
+        twoPairs2 = CombinationHelper.hasTwoPairs(hand2.getCards(), river);
+        assertNotNull(twoPairs1);
+        assertNotNull(twoPairs2);
+        i = twoPairs1.compareTo(twoPairs2);
+        i2 = twoPairs2.compareTo(twoPairs1);
+        //test 2+2 and A+A  <  10+10 and A+A
+        assertEquals(i, -1);
+        assertEquals(i2, 1);
+
+
+        //now test very hard example. two pair on river
+        river.clear();
+        river.add(new Card(Rank.EIGHT, Mast.PIKI));
+        river.add(new Card(Rank.ACE, Mast.KRESTI));
+        river.add(new Card(Rank.ACE, Mast.BUBI));
+        river.add(new Card(Rank.KING, Mast.BUBI));
+        river.add(new Card(Rank.KING, Mast.BUBI));
+        hand1.initializeCards(new Card(Rank.TWO, Mast.CHERVI), new Card(Rank.TWO, Mast.PIKI));
+        hand2.initializeCards(new Card(Rank.FOUR, Mast.KRESTI), new Card(Rank.FOUR, Mast.PIKI));
+        twoPairs1 = CombinationHelper.hasTwoPairs(hand1.getCards(), river);
+        twoPairs2 = CombinationHelper.hasTwoPairs(hand2.getCards(), river);
+        assertNotNull(twoPairs1);
+        assertNotNull(twoPairs2);
         i = twoPairs1.compareTo(twoPairs2);
         i2 = twoPairs2.compareTo(twoPairs1);
         assertEquals(i, -1);
@@ -152,27 +214,24 @@ public class AllCompareTests extends Assert {
         Hand hand1 = new Hand(1);
         Hand hand2 = new Hand(2);
         Hand hand3 = new Hand(3);
-        Hand hand4 = new Hand(4);
         hand1.initializeCards(new Card(Rank.TWO, Mast.CHERVI), new Card(Rank.TWO, Mast.PIKI));
-        hand2.initializeCards(new Card(Rank.FOUR, Mast.KRESTI), new Card(Rank.TEN, Mast.PIKI));
-        hand3.initializeCards(new Card(Rank.NINE, Mast.KRESTI), new Card(Rank.NINE, Mast.PIKI));
-        hand4.initializeCards(new Card(Rank.KING, Mast.KRESTI), new Card(Rank.FOUR, Mast.BUBI));
+        hand2.initializeCards(new Card(Rank.FOUR, Mast.KRESTI), new Card(Rank.FOUR, Mast.PIKI));
+        hand3.initializeCards(new Card(Rank.NINE, Mast.KRESTI), new Card(Rank.TWO, Mast.BUBI));
         List<Card> river = new ArrayList<>();
 
 
         //initialize 4 card
-        river.add(new Card(Rank.THREE, Mast.PIKI));
+        river.add(new Card(Rank.NINE, Mast.PIKI));
         river.add(new Card(Rank.ACE, Mast.KRESTI));
         river.add(new Card(Rank.ACE, Mast.BUBI));
         river.add(new Card(Rank.FOUR, Mast.CHERVI));
         river.add(new Card(Rank.QUEEN, Mast.BUBI));
-
-        CombinationsForOneCard combinationsForOneCard = new CombinationsForOneCard();
-        combinationsForOneCard.addPair(new HandCardSet<Pair>(hand1,CombinationHelper.hasPair(new ArrayList<Card>(hand1.getCards()),river)));
-        combinationsForOneCard.addPair(new HandCardSet<Pair>(hand2,CombinationHelper.hasPair(new ArrayList<Card>(hand2.getCards()),river)));
-        combinationsForOneCard.addPair(new HandCardSet<Pair>(hand3,CombinationHelper.hasPair(new ArrayList<Card>(hand3.getCards()),river)));
-        combinationsForOneCard.addPair(new HandCardSet<Pair>(hand4,CombinationHelper.hasPair(new ArrayList<Card>(hand4.getCards()),river)));
-
-        int g = 0;
+        Pair pair1 = CombinationHelper.hasPair(hand1.getCards(), river, false);
+        Pair pair2 = CombinationHelper.hasPair(hand2.getCards(), river, false);
+        Pair pair3 = CombinationHelper.hasPair(hand3.getCards(), river, false);
+        assertEquals(pair1.compareTo(pair2),-1);
+        assertEquals(pair2.compareTo(pair1), 1);
+        assertEquals(pair1.compareTo(pair3), -1);
+        assertEquals(pair3.compareTo(pair1),  1);
     }
 }

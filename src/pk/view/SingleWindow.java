@@ -155,5 +155,6 @@ public class SingleWindow extends JFrame {
             flop.add(cardPlaces.get(i).getCard());
         }
         CombinationHelper.doMagic(hands,flop);
+        int g = 0;
     }
 }

@@ -166,18 +166,17 @@ public class CombinationsForOneCard {
         HandCardSet resultTriplet = (HandCardSet)cardSets.get(0);
         for (Object o : cardSets) {
             HandCardSet o1 = (HandCardSet)o;
-            int i = resultTriplet.getSomeCombination().compareTo(o1.getSomeCombination());
-            if (i == -1) {
-                resultTriplet = o1;
-            }
-            if (i == 0 && resultTriplet.getSomeCombination() != o1.getSomeCombination()) {
-                bestCardSets.add(o1);
+            if (o1 != resultTriplet) {
+                int i = resultTriplet.getSomeCombination().compareTo(o1.getSomeCombination());
+                if (i == -1) {
+                    resultTriplet = o1;
+                }
+                if (i == 0 && resultTriplet.getSomeCombination() != o1.getSomeCombination()) {
+                    bestCardSets.add(o1);
+                }
             }
         }
         bestCardSets.add(resultTriplet);
         return bestCardSets;
     }
-
-
-
 }
