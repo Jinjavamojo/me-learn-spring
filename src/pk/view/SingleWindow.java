@@ -2,6 +2,7 @@ package pk.view;
 
 import net.miginfocom.swing.MigLayout;
 import pk.CombinationHelper;
+import pk.combinations.CardSet;
 import pk.model.*;
 
 import javax.imageio.ImageIO;
@@ -25,12 +26,12 @@ public class SingleWindow extends JFrame {
     public final static int cols = 13;
 
     private List<CardPlace> cardPlaces;
-    private List<PlayerCardChooser> playerCardChoosers;
+    private Map<Integer,PlayerCardChooser> playerCardChoosers;
     
 
     public SingleWindow() {
         cardPlaces = new ArrayList<>();
-        playerCardChoosers = new ArrayList<>();
+        playerCardChoosers = new HashMap<>();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Container contentPane = getContentPane();
         //MigLayout migLayout = new MigLayout();
@@ -49,7 +50,7 @@ public class SingleWindow extends JFrame {
         }
         for (int i = 1; i < 3; i ++) {
             PlayerCardChooser choser = new PlayerCardChooser(i);
-            playerCardChoosers.add(choser);
+            playerCardChoosers.put(i, choser);
             if (i == 2) {
                 jPanel.add(choser,"wrap");
             } else {
@@ -146,15 +147,29 @@ public class SingleWindow extends JFrame {
 
     public void calculate() {
         List<Hand> hands = new ArrayList<>();
-        for (int i = 0; i < playerCardChoosers.size(); i++) {
-            List<Card> cards = playerCardChoosers.get(i).getCards();
-            hands.add(new Hand(i,cards.get(0),cards.get(1)));
+        List<PlayerCardChooser> values = new ArrayList<>(playerCardChoosers.values());
+        for (int i = 0; i < values.size(); i++) {
+            List<Card> cards = values.get(i).getCards();
+            hands.add(new Hand(i+1,cards.get(0),cards.get(1)));
         }
         List<Card> flop = new ArrayList<>();
         for (int i = 0; i < cardPlaces.size(); i++) {
             flop.add(cardPlaces.get(i).getCard());
         }
-        CombinationHelper.doMagic(hands,flop);
-        int g = 0;
+        Map<Hand, List<CardSet>> handListMap = CombinationHelper.doMagic(hands, flop);
+        for (Map.Entry<Hand, List<CardSet>> handListEntry : handListMap.entrySet()) {
+            int number = handListEntry.getKey().getNumber();
+            PlayerCardChooser playerCardChooser = playerCardChoosers.get(number);
+            playerCardChooser.clearList();
+            for(CardSet cardSet : handListEntry.getValue()) {
+                playerCardChooser.addElementToList(cardSet.toString());
+            }
+        }
+        Map<CardSet,Integer> couter = new HashMap<>();
+        for (List<CardSet> c : handListMap.values()) {
+            if (couter.get(c) != null) {
+               couter.put(c)
+            }
+        }
     }
 }

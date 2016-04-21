@@ -35,4 +35,9 @@ public class FullHouse extends CardSet<FullHouse> {
     public void setPair(Pair pair) {
         this.pair = pair;
     }
+
+    @Override
+    public String toString() {
+        return pair.toString() + " + " + triple.toString();
+    }
 }

@@ -157,7 +157,7 @@ public class CombinationsForOneCard {
             bestHandCardSets.addAll(getBestFromOneTypeCombinations(pairs));
             return bestHandCardSets;
         }
-        return null;
+        return bestHandCardSets;
 
     }
 

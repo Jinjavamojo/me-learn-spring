@@ -373,7 +373,8 @@ public class CombinationHelper {
         return deck;
     }
 
-    public static void doMagic(List<Hand> hands, List<Card> flop ) {
+    public static Map<Hand, List<CardSet>> doMagic(List<Hand> hands, List<Card> flop ) {
+        Map<Hand,List<CardSet>> combinationsByPlayer = new HashMap<>();
         final ArrayList<Card> deck = initializeDeck();
         for (Hand hand : hands) {
             deck.removeAll(hand.getCards());
@@ -416,6 +417,14 @@ public class CombinationHelper {
             }
             allCombs.addAll(combinationsForOneCard.getOnlyBestWinnerCombination());
         }
-        int g = 0;
+        for (HandCardSet hcs : allCombs) {
+            List<CardSet> cardSetByPlayer = combinationsByPlayer.get(hcs.getHand());
+            if (cardSetByPlayer == null) {
+                cardSetByPlayer = new ArrayList<>();
+                combinationsByPlayer.put(hcs.getHand(),cardSetByPlayer);
+            }
+            cardSetByPlayer.add(hcs.getSomeCombination());
+        }
+       return combinationsByPlayer;
     }
 }

@@ -16,4 +16,20 @@ public abstract class CardSet<T> implements Comparable<T> {
     public void setCards(List<Card> cards) {
         this.cards = cards;
     }
+
+    @Override
+    public String toString() {
+        String s = "";
+        for (Card card : cards) {
+            s+=card.toString() + " ";
+        }
+        return s;
+    }
+
+    public int getWeight() {
+        int w = 0;
+        for (Card card : cards) {
+            w+=card.hashCode();
+        }
+    }
 }

@@ -229,9 +229,9 @@ public class AllCompareTests extends Assert {
         Pair pair1 = CombinationHelper.hasPair(hand1.getCards(), river, false);
         Pair pair2 = CombinationHelper.hasPair(hand2.getCards(), river, false);
         Pair pair3 = CombinationHelper.hasPair(hand3.getCards(), river, false);
-        assertEquals(pair1.compareTo(pair2),-1);
+        assertEquals(pair1.compareTo(pair2), -1);
         assertEquals(pair2.compareTo(pair1), 1);
         assertEquals(pair1.compareTo(pair3), -1);
-        assertEquals(pair3.compareTo(pair1),  1);
+        assertEquals(pair3.compareTo(pair1), 1);
     }
 }

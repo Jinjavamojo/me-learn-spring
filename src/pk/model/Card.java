@@ -45,7 +45,7 @@ public class Card implements Cloneable, Comparable<Card> {
 
     @Override
     public String toString() {
-        return rank.toString() + " " + mast.toString() + "/" + (rank.getValue() + mast.getValue());
+        return rank.toString() + " " + mast.toString();
     }
 
     @Override
