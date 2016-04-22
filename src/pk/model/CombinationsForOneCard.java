@@ -165,7 +165,7 @@ public class CombinationsForOneCard {
 
     }
 
-    public List<HandCardSet> getBestFromOneTypeCombinations(List cardSets) {
+    private List<HandCardSet> getBestFromOneTypeCombinations(List cardSets) {
         List<HandCardSet> bestCardSets = new ArrayList<>();
         HandCardSet resultTriplet = (HandCardSet)cardSets.get(0);
         for (Object o : cardSets) {

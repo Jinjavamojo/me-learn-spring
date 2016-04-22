@@ -8,7 +8,6 @@ public class Pair extends CardSet<Pair> {
 
     public final Card card1;
     public final Card card2;
-    private boolean haveEqualPair = false;
 
     public Pair(Card card1, Card card2) {
         cards = new ArrayList<>();
@@ -33,13 +32,6 @@ public class Pair extends CardSet<Pair> {
         return card1.getRank().getValue() + card2.getRank().getValue();
     }
 
-    public boolean isHaveEqualPair() {
-        return haveEqualPair;
-    }
-
-    public void setHaveEqualPair(boolean haveEqualPair) {
-        this.haveEqualPair = haveEqualPair;
-    }
 
     @Override
     public int compareTo(Pair o) {

@@ -17,8 +17,6 @@ public class PairComparator<T> implements Comparator<T> {
                 return -1;
             if (pair1.getWeight() < pair2.getWeight())
                 return 1;
-            pair1.setHaveEqualPair(true);
-            pair2.setHaveEqualPair(true);
             return 0;
         }
         throw new RuntimeException();

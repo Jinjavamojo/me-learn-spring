@@ -1,8 +1,11 @@
 package pk;
 
 import com.sun.istack.internal.Nullable;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.Predicate;
 import pk.combinations.*;
 import pk.comparators.DeckComparator;
+import pk.comparators.PairComparator;
 import pk.comparators.RankComparator;
 import pk.model.*;
 
@@ -13,6 +16,7 @@ public class CombinationHelper {
 
     public static Comparator<Card> ascRankComparator = new RankComparator(true);
     public static Comparator<Card> descRankComparator = new RankComparator(false);
+    public static Comparator<Card> pairComparator = new PairComparator<>();
 
     public static Pair hasPair(@Nullable List<Card> playerCards, List<Card> turn, boolean canFindPairInTurn) {
         if (playerCards != null) {
@@ -27,23 +31,23 @@ public class CombinationHelper {
             }
         }
         if (canFindPairInTurn) {
-            return findPairInTurn(turn);
+            return findBestPair(turn);
         }
         return null;
     }
 
-    private static Pair findPairInTurn(List<Card> turn) {
+    private static List<Pair> findAllPairs(List<Card> turn) {
+        List<Pair> pairs = new ArrayList<>();
         for (int i = 0; i < turn.size(); i++) {
             Card card1 = turn.get(i);
             for (int j = i + 1; j < turn.size(); j++) {
                 Card card2 = turn.get(j);
                 if (card1.getRank().equals(card2.getRank())) {
-                    return new Pair(card1, card2);
+                    pairs.add(new Pair(card1, card2));
                 }
             }
         }
-        return null;
-
+        return pairs;
     }
 
     //can be 1+1 and 1+1
@@ -52,10 +56,16 @@ public class CombinationHelper {
     //can be 1 and 2 + 1
     public static TwoPairs hasTwoPairs(List<Card> playerCards, List<Card> turn) {
         Collections.sort(turn, descRankComparator);
+        List<Card> cards = new ArrayList<>();
+        cards.addAll(playerCards);
+        cards.addAll(turn);
+        List<Pair> allPairs = findAllPairs(cards);
+        Collections.sort(allPairs, pairComparator);
+
         Rank rank = playerCards.get(0).getRank();
         if (rank.getValue() == playerCards.get(1).getRank().getValue()) {
             //then 2+2 and we find second pair in turn.
-            Pair pairInTurn = findPairInTurn(turn);
+            Pair pairInTurn = findBestPair(turn);
             if (pairInTurn != null)
                 return new TwoPairs(new Pair(playerCards.get(0),playerCards.get(1)),pairInTurn);
         } else {
@@ -87,7 +97,7 @@ public class CombinationHelper {
         }
         //we find second pair in turn
         if (pair != null) {
-            Pair pairInTurn = findPairInTurn(turn);
+            Pair pairInTurn = findBestPair(turn);
             if (pairInTurn != null) {
                 return new TwoPairs(pair, pairInTurn);
             }

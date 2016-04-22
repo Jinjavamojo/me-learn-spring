@@ -207,6 +207,26 @@ public class AllCompareTests extends Assert {
         i2 = twoPairs2.compareTo(twoPairs1);
         assertEquals(i, -1);
         assertEquals(i2, 1);
+
+        river.clear();
+        river.add(new Card(Rank.TWO, Mast.PIKI));
+        river.add(new Card(Rank.ACE, Mast.KRESTI));
+        river.add(new Card(Rank.ACE, Mast.BUBI));
+        river.add(new Card(Rank.JACK, Mast.BUBI));
+        river.add(new Card(Rank.FOUR, Mast.BUBI));
+        hand1.initializeCards(new Card(Rank.TWO, Mast.CHERVI), new Card(Rank.KING, Mast.PIKI));
+        hand2.initializeCards(new Card(Rank.FOUR, Mast.KRESTI), new Card(Rank.JACK, Mast.PIKI));
+        twoPairs1 = CombinationHelper.hasTwoPairs(hand1.getCards(), river);
+        twoPairs2 = CombinationHelper.hasTwoPairs(hand2.getCards(), river);
+        assertNotNull(twoPairs1);
+        assertNotNull(twoPairs2);
+        CombinationsForOneCard combinationsForOneCard = new CombinationsForOneCard();
+        combinationsForOneCard.addTwoPair(new HandCardSet<TwoPairs>(hand1, twoPairs1));
+        combinationsForOneCard.addTwoPair(new HandCardSet<TwoPairs>(hand2, twoPairs2));
+        Collection<HandCardSet> onlyBestWinnerCombination = combinationsForOneCard.getOnlyBestWinnerCombination();
+        assertEquals(onlyBestWinnerCombination.size(),1);
+        assertEquals(onlyBestWinnerCombination.iterator().next().getHand().getNumber(), 2);
+        int g = 0;
     }
 
     @Test
