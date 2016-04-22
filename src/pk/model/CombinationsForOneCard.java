@@ -153,6 +153,10 @@ public class CombinationsForOneCard {
             bestHandCardSets.addAll(getBestFromOneTypeCombinations(triples));
             return bestHandCardSets;
         }
+        if (!CollectionUtils.isEmpty(twoPairs)) {
+            bestHandCardSets.addAll(getBestFromOneTypeCombinations(twoPairs));
+            return bestHandCardSets;
+        }
         if (!CollectionUtils.isEmpty(pairs)) {
             bestHandCardSets.addAll(getBestFromOneTypeCombinations(pairs));
             return bestHandCardSets;

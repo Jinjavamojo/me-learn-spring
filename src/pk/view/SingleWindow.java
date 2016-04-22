@@ -156,20 +156,61 @@ public class SingleWindow extends JFrame {
         for (int i = 0; i < cardPlaces.size(); i++) {
             flop.add(cardPlaces.get(i).getCard());
         }
-        Map<Hand, List<CardSet>> handListMap = CombinationHelper.doMagic(hands, flop);
-        for (Map.Entry<Hand, List<CardSet>> handListEntry : handListMap.entrySet()) {
-            int number = handListEntry.getKey().getNumber();
-            PlayerCardChooser playerCardChooser = playerCardChoosers.get(number);
+        Map<Hand, List<CardSet>> combinationByHandMap = CombinationHelper.doMagic(hands, flop);
+//
+        //count combinations by hand
+        //Map<CardSet,Integer> couter = new HashMap<>();
+        Map<Hand,Map<CardSet,Integer>> couter = new HashMap<>();
+        for (Map.Entry<Hand, List<CardSet>> cmh : combinationByHandMap.entrySet() ) {
+            //initialize counting map if null
+            Map<CardSet, Integer> combByHand = couter.get(cmh.getKey());
+            if (combByHand == null) {
+                combByHand = new HashMap<>();
+                couter.put(cmh.getKey(),combByHand);
+            }
+            for (CardSet cs: cmh.getValue()) {
+                Integer counOfCombination = combByHand.get(cs);
+                if (counOfCombination == null) {
+                    counOfCombination = 1;
+                    combByHand.put(cs, counOfCombination);
+                } else {
+                    combByHand.put(cs, ++counOfCombination);
+                }
+            }
+        }
+        for (PlayerCardChooser playerCardChooser : playerCardChoosers.values()) {
             playerCardChooser.clearList();
-            for(CardSet cardSet : handListEntry.getValue()) {
-                playerCardChooser.addElementToList(cardSet.toString());
-            }
         }
-        Map<CardSet,Integer> couter = new HashMap<>();
-        for (List<CardSet> c : handListMap.values()) {
-            if (couter.get(c) != null) {
-               couter.put(c)
+        for (Map.Entry<Hand, Map<CardSet, Integer>> handMapEntry : couter.entrySet()) {
+            int totalByHand = 0;
+            Hand hand = handMapEntry.getKey();
+            PlayerCardChooser playerCardChooser = playerCardChoosers.get(hand.getNumber());
+            Map<CardSet, Integer> value = handMapEntry.getValue();
+            for (Map.Entry<CardSet, Integer> cardSetIntegerEntry : value.entrySet()) {
+                totalByHand+=cardSetIntegerEntry.getValue();
+                playerCardChooser.addElementToList(cardSetIntegerEntry.getKey().toString() + "(" + cardSetIntegerEntry.getValue() + ")");
             }
+            playerCardChooser.addElementToList(String.format("total : %s", totalByHand));
         }
+
+        //get combination by hand
+//        for (Map.Entry<Hand, List<CardSet>> handListEntry : combinationByHandMap.entrySet()) {
+//            int number = handListEntry.getKey().getNumber();
+//            PlayerCardChooser playerCardChooser = playerCardChoosers.get(number);
+//            playerCardChooser.clearList();
+//            for(CardSet cardSet : handListEntry.getValue()) {
+//                playerCardChooser.addElementToList(cardSet.toString());
+//            }
+//        }
+
+//        //get combination by hand
+//        for (Map.Entry<Hand, List<CardSet>> handListEntry : combinationByHandMap.entrySet()) {
+//            int number = handListEntry.getKey().getNumber();
+//            PlayerCardChooser playerCardChooser = playerCardChoosers.get(number);
+//            playerCardChooser.clearList();
+//            for(CardSet cardSet : handListEntry.getValue()) {
+//                playerCardChooser.addElementToList(cardSet.toString());
+//            }
+//        }
     }
 }

@@ -219,7 +219,6 @@ public class AllCompareTests extends Assert {
         hand3.initializeCards(new Card(Rank.NINE, Mast.KRESTI), new Card(Rank.TWO, Mast.BUBI));
         List<Card> river = new ArrayList<>();
 
-
         //initialize 4 card
         river.add(new Card(Rank.NINE, Mast.PIKI));
         river.add(new Card(Rank.ACE, Mast.KRESTI));
@@ -233,5 +232,82 @@ public class AllCompareTests extends Assert {
         assertEquals(pair2.compareTo(pair1), 1);
         assertEquals(pair1.compareTo(pair3), -1);
         assertEquals(pair3.compareTo(pair1), 1);
+    }
+
+    @Test
+    public void equalsCardSets() {
+        List<Card> flushCards1 = new ArrayList<>();
+        flushCards1.add(new Card(Rank.FIVE,Mast.BUBI));
+        flushCards1.add(new Card(Rank.FOUR,Mast.BUBI));
+        flushCards1.add(new Card(Rank.THREE,Mast.BUBI));
+        flushCards1.add(new Card(Rank.TWO,Mast.BUBI));
+        flushCards1.add(new Card(Rank.TEN,Mast.BUBI));
+        Flush c1 = new Flush(flushCards1);
+        List<Card> flushCards2 = new ArrayList<>();
+        flushCards2.add(new Card(Rank.FIVE,Mast.BUBI));
+        flushCards2.add(new Card(Rank.FOUR, Mast.BUBI));
+        flushCards2.add(new Card(Rank.THREE, Mast.BUBI));
+        flushCards2.add(new Card(Rank.TWO, Mast.BUBI));
+        flushCards2.add(new Card(Rank.TEN, Mast.BUBI));
+        Flush c2 = new Flush(flushCards2);
+        assertEquals(c1, c2);
+
+        flushCards1 = new ArrayList<>();
+        flushCards1.add(new Card(Rank.FIVE,Mast.BUBI));
+        flushCards1.add(new Card(Rank.FOUR,Mast.BUBI));
+        flushCards1.add(new Card(Rank.THREE,Mast.BUBI));
+        flushCards1.add(new Card(Rank.TWO, Mast.BUBI));
+        flushCards1.add(new Card(Rank.TEN, Mast.BUBI));
+        flushCards2 = new ArrayList<>();
+        flushCards2.add(new Card(Rank.FIVE, Mast.BUBI));
+        flushCards2.add(new Card(Rank.FOUR, Mast.BUBI));
+        flushCards2.add(new Card(Rank.THREE,Mast.BUBI));
+        flushCards2.add(new Card(Rank.TWO,Mast.BUBI));
+        flushCards2.add(new Card(Rank.TEN, Mast.PIKI));
+        c1 = new Flush(flushCards1);
+        c2 = new Flush(flushCards2);
+        assertNotEquals(c1, c2);
+
+        flushCards1 = new ArrayList<>();
+        flushCards1.add(new Card(Rank.FIVE,Mast.BUBI));
+        flushCards1.add(new Card(Rank.FOUR,Mast.BUBI));
+        flushCards2 = new ArrayList<>();
+        flushCards2.add(new Card(Rank.FIVE,Mast.BUBI));
+        flushCards2.add(new Card(Rank.FOUR, Mast.BUBI));
+        flushCards2.add(new Card(Rank.THREE,Mast.BUBI));
+        flushCards2.add(new Card(Rank.TWO, Mast.BUBI));
+        flushCards2.add(new Card(Rank.TEN, Mast.PIKI));
+        c1 = new Flush(flushCards1);
+        c2 = new Flush(flushCards2);
+        assertNotEquals(c1, c2);
+
+        flushCards1 = new ArrayList<>();
+        flushCards1.add(new Card(Rank.FIVE,Mast.BUBI));
+        flushCards1.add(new Card(Rank.FOUR,Mast.BUBI));
+        flushCards2 = new ArrayList<>();
+        flushCards2.add(new Card(Rank.FIVE,Mast.BUBI));
+        flushCards2.add(new Card(Rank.ACE, Mast.BUBI));
+        c1 = new Flush(flushCards1);
+        c2 = new Flush(flushCards2);
+        assertNotEquals(c1, c2);
+
+        flushCards1 = new ArrayList<>();
+        flushCards1.add(new Card(Rank.FIVE,Mast.BUBI));
+        flushCards1.add(new Card(Rank.FOUR,Mast.BUBI));
+        flushCards2 = new ArrayList<>();
+        flushCards2.add(new Card(Rank.FIVE,Mast.BUBI));
+        c1 = new Flush(flushCards1);
+        c2 = new Flush(flushCards2);
+        assertNotEquals(c1, c2);
+
+        flushCards1 = new ArrayList<>();
+        flushCards1.add(new Card(Rank.FIVE,Mast.BUBI));
+        flushCards1.add(new Card(Rank.FOUR,Mast.BUBI));
+        flushCards2 = new ArrayList<>();
+        flushCards2.add(new Card(Rank.FOUR,Mast.BUBI));
+        flushCards2.add(new Card(Rank.FIVE,Mast.BUBI));
+        c1 = new Flush(flushCards1);
+        c2 = new Flush(flushCards2);
+        assertEquals(c1, c2);
     }
 }

@@ -49,6 +49,7 @@ public class CombinationHelper {
     //can be 1+1 and 1+1
     //can be 2 + 2
     //can be 1+1 and 2
+    //can be 1 and 2 + 1
     public static TwoPairs hasTwoPairs(List<Card> playerCards, List<Card> turn) {
         Collections.sort(turn, descRankComparator);
         Rank rank = playerCards.get(0).getRank();
@@ -99,27 +100,37 @@ public class CombinationHelper {
     //can be 2 + 1
     //can be 0 + 3 - need only by full house
     public static Triple hasTriple(List<Card> playerCards, List<Card> turn) {
-        Rank rank = playerCards.get(0).getRank();
         List<Card> result = new ArrayList<>();
-        result.add(playerCards.get(0));
-        if (rank.getValue() == playerCards.get(1).getRank().getValue()) {
-            //then we have pair and find third card in turn
-            result.add(playerCards.get(1));
-            for (Card card : turn) {
-                if (card.getRank().getValue() == rank.getValue()) {
-                    result.add(card);
+        for (int i = 0; i < playerCards.size(); i++) {
+            result.clear();
+            Card firstCard = playerCards.get(i);
+            Card secondCard;
+            if (i == 1) {
+                secondCard = playerCards.get(0);
+            } else {
+                secondCard = playerCards.get(i+1);
+            }
+            Rank rank = firstCard.getRank();
+            result.add(firstCard);
+            if (rank.getValue() == secondCard.getRank().getValue()) {
+                //then we have pair and find third card in turn
+                result.add(secondCard);
+                for (Card card : turn) {
+                    if (card.getRank().getValue() == rank.getValue()) {
+                        result.add(card);
+                        return new Triple(result);
+                    }
+                }
+            } else {
+                //then find two cards with same rank
+                for (Card card : turn) {
+                    if (card.getRank().getValue() == rank.getValue()) {
+                        result.add(card);
+                    }
+                }
+                if (result.size() == 3)
                     return new Triple(result);
-                }
             }
-        } else {
-            //then find two cards with same rank
-            for (Card card : turn) {
-                if (card.getRank().getValue() == rank.getValue()) {
-                    result.add(card);
-                }
-            }
-            if (result.size() == 3)
-                return new Triple(result);
         }
         return null;
     }

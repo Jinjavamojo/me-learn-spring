@@ -38,7 +38,7 @@ dependencies {
     compile 'org.springframework:spring-expression:4.2.5.RELEASE'
     compile 'org.springframework:spring-test:4.2.5.RELEASE'
     compile 'com.miglayout:miglayout:3.7.3.1'
-
+    compile 'org.apache.commons:commons-collections4:4.1'
 }
 
 task createDirs << {
