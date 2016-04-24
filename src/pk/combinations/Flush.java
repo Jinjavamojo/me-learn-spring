@@ -31,6 +31,6 @@ public class Flush extends CardSet<Flush> {
                 return -1;
             }
         }
-        throw new RuntimeException("someting is gonna wrong: two equals flush combinations");
+        return 0;
     }
 }

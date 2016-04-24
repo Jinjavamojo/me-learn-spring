@@ -10,9 +10,9 @@ public class PairComparator<T> implements Comparator<T> {
 
     @Override
     public int compare(T o, T t1) {
-        if (o instanceof HandCardSet && t1 instanceof HandCardSet) {
-            Pair pair1 = (Pair)((HandCardSet) o).getSomeCombination();
-            Pair pair2 = (Pair)((HandCardSet)t1).getSomeCombination();
+        if (o instanceof Pair && t1 instanceof Pair) {
+            Pair pair1 = (Pair)o;
+            Pair pair2 = (Pair)t1;
             if (pair1.getWeight() >  pair2.getWeight())
                 return -1;
             if (pair1.getWeight() < pair2.getWeight())

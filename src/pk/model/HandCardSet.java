@@ -30,6 +30,11 @@ public class HandCardSet<T extends Comparable>  {
         this.someCombination = someCombination;
     }
 
+    public boolean isEqualsToSomeElse() {
+        return someCombination.isEqualsToSomeElse();
+    }
 
-
+    public void setEqualsToSomeElse(boolean isEqualsToSomeElse) {
+        someCombination.setEqualsToSomeElse(isEqualsToSomeElse);
+    }
 }

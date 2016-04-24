@@ -8,13 +8,22 @@ import java.util.List;
 
 public class Street extends CardSet<Street> {
 
-    public Street(List<Card> cards) {
-       this.cards = new ArrayList<>();
+    boolean isMinor = false;
+
+    public Street(List<Card> cards, boolean isMinor) {
+        this.cards = new ArrayList<>();
         this.cards.addAll(cards);
+        this.isMinor = isMinor;
     }
 
     @Override
     public int compareTo(Street o) {
+        if (this.isMinor && o.isMinor)
+            return 0;
+        if (this.isMinor)
+            return -1;
+        if (o.isMinor)
+            return 1;
         for (Card card : this.cards) {
             for (Card otherCard : o.getCards()) {
                 if (card.getRank().getValue() > otherCard.getRank().getValue()) {
@@ -28,5 +37,11 @@ public class Street extends CardSet<Street> {
         return 0;
     }
 
+    public boolean isMinor() {
+        return isMinor;
+    }
 
+    public void setMinor(boolean isMinor) {
+        this.isMinor = isMinor;
+    }
 }

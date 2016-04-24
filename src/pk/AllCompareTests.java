@@ -4,6 +4,7 @@ import org.junit.Assert;
 import pk.combinations.*;
 
 import org.junit.Test;
+import pk.comparators.PairComparator;
 import pk.model.*;
 import pk.view.SingleWindow;
 
@@ -14,7 +15,10 @@ public class AllCompareTests extends Assert {
     
 
     public static void main(String[] args) {
-        SingleWindow w = new SingleWindow();
+
+        //A A 4 10
+        //2 4 AND 2 4
+         new SingleWindow();
     }
 
     //tested
@@ -80,6 +84,7 @@ public class AllCompareTests extends Assert {
     public void hasStreet() {
         //test minor street, A 2 3 4 5
         Hand hand1 = new Hand(1);
+        Hand hand2 = new Hand(2);
         hand1.initializeCards(new Card(Rank.TWO, Mast.CHERVI), new Card(Rank.ACE, Mast.PIKI));
         List<Card> c1 = new ArrayList<>();
         c1.add(new Card(Rank.QUEEN, Mast.BUBI));
@@ -118,7 +123,26 @@ public class AllCompareTests extends Assert {
         Street street4 = CombinationHelper.hasStreet(hand1.getCards(), c3);
         assertNull(street4);
 
+        CombinationsForOneCard combinationsForOneCard = new CombinationsForOneCard();
+        combinationsForOneCard.addStreet(new HandCardSet<Street>(hand1,street));
+        combinationsForOneCard.addStreet(new HandCardSet<Street>(hand2,street2));
+        Collection<HandCardSet> onlyBestWinnerCombination = combinationsForOneCard.getOnlyBestWinnerCombination();
+        assertEquals(onlyBestWinnerCombination.size(),1);
+        assertEquals(onlyBestWinnerCombination.iterator().next().getHand().getNumber(), 2);
 
+
+
+    }
+
+    @Test
+    public void testMaxPair() {
+        Comparator<Pair> pairComparator = new PairComparator<>();
+        List<Pair> pairs = new ArrayList<>();
+        Pair pair = new Pair(new Card(Rank.FIVE, Mast.BUBI), new Card(Rank.FIVE, Mast.KRESTI));
+        pairs.add(pair);
+        pairs.add(new Pair(new Card(Rank.KING,Mast.BUBI), new Card(Rank.KING, Mast.KRESTI)));
+        Pair max = Collections.max(pairs, pairComparator);
+        assertEquals(max,pair);
     }
 
 
@@ -248,6 +272,13 @@ public class AllCompareTests extends Assert {
         Pair pair1 = CombinationHelper.hasPair(hand1.getCards(), river, false);
         Pair pair2 = CombinationHelper.hasPair(hand2.getCards(), river, false);
         Pair pair3 = CombinationHelper.hasPair(hand3.getCards(), river, false);
+        CombinationsForOneCard combinationsForOneCard = new CombinationsForOneCard();
+        combinationsForOneCard.addPair(new HandCardSet<Pair>(hand1,pair1));
+        combinationsForOneCard.addPair(new HandCardSet<Pair>(hand2,pair2));
+        combinationsForOneCard.addPair(new HandCardSet<Pair>(hand3,pair3));
+        Collection<HandCardSet> onlyBestWinnerCombination = combinationsForOneCard.getOnlyBestWinnerCombination();
+        assertEquals(onlyBestWinnerCombination.size(),1);
+        assertEquals(onlyBestWinnerCombination.iterator().next().getHand().getNumber(),3);
         assertEquals(pair1.compareTo(pair2), -1);
         assertEquals(pair2.compareTo(pair1), 1);
         assertEquals(pair1.compareTo(pair3), -1);

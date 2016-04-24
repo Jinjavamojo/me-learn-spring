@@ -48,10 +48,10 @@ public class SingleWindow extends JFrame {
                 jPanel.add(cp);
             }
         }
-        for (int i = 1; i < 3; i ++) {
+        for (int i = 1; i < 7; i ++) {
             PlayerCardChooser choser = new PlayerCardChooser(i);
             playerCardChoosers.put(i, choser);
-            if (i == 2) {
+            if (i == 3) {
                 jPanel.add(choser,"wrap");
             } else {
                 jPanel.add(choser);
@@ -65,7 +65,10 @@ public class SingleWindow extends JFrame {
             }
         });
         jPanel.add(button);
-        contentPane.add(jPanel);
+        int v=ScrollPaneConstants. VERTICAL_SCROLLBAR_AS_NEEDED;
+        int h=ScrollPaneConstants. HORIZONTAL_SCROLLBAR_AS_NEEDED;
+        JScrollPane jsp = new JScrollPane(jPanel,v,h);
+        contentPane.add(jsp);
         pack();
         setVisible(true);
     }
@@ -187,8 +190,15 @@ public class SingleWindow extends JFrame {
             PlayerCardChooser playerCardChooser = playerCardChoosers.get(hand.getNumber());
             Map<CardSet, Integer> value = handMapEntry.getValue();
             for (Map.Entry<CardSet, Integer> cardSetIntegerEntry : value.entrySet()) {
-                totalByHand+=cardSetIntegerEntry.getValue();
-                playerCardChooser.addElementToList(cardSetIntegerEntry.getKey().toString() + "(" + cardSetIntegerEntry.getValue() + ")");
+                if (cardSetIntegerEntry.getKey().isEqualsToSomeElse()) {
+                    playerCardChooser.addElementToList(cardSetIntegerEntry.getKey().toString() + "(-)");
+
+                } else {
+                    totalByHand+=cardSetIntegerEntry.getValue();
+                    playerCardChooser.addElementToList(cardSetIntegerEntry.getKey().toString() + "(" + cardSetIntegerEntry.getValue() + ")");
+                }
+
+
             }
             playerCardChooser.addElementToList(String.format("total : %s", totalByHand));
         }

@@ -1,8 +1,6 @@
 package pk;
 
 import com.sun.istack.internal.Nullable;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.Predicate;
 import pk.combinations.*;
 import pk.comparators.DeckComparator;
 import pk.comparators.PairComparator;
@@ -16,7 +14,7 @@ public class CombinationHelper {
 
     public static Comparator<Card> ascRankComparator = new RankComparator(true);
     public static Comparator<Card> descRankComparator = new RankComparator(false);
-    public static Comparator<Card> pairComparator = new PairComparator<>();
+    public static Comparator<Pair> pairComparator = new PairComparator<>();
 
     public static Pair hasPair(@Nullable List<Card> playerCards, List<Card> turn, boolean canFindPairInTurn) {
         if (playerCards != null) {
@@ -31,7 +29,7 @@ public class CombinationHelper {
             }
         }
         if (canFindPairInTurn) {
-            return findBestPair(turn);
+            return Collections.max(findAllPairs(turn));
         }
         return null;
     }
@@ -50,59 +48,51 @@ public class CombinationHelper {
         return pairs;
     }
 
-    //can be 1+1 and 1+1
+
     //can be 2 + 2
-    //can be 1+1 and 2
-    //can be 1 and 2 + 1
+    //in case 1+1 we will find best pair in turn and in playerCard
     public static TwoPairs hasTwoPairs(List<Card> playerCards, List<Card> turn) {
-        Collections.sort(turn, descRankComparator);
-        List<Card> cards = new ArrayList<>();
-        cards.addAll(playerCards);
-        cards.addAll(turn);
-        List<Pair> allPairs = findAllPairs(cards);
-        Collections.sort(allPairs, pairComparator);
-
-        Rank rank = playerCards.get(0).getRank();
-        if (rank.getValue() == playerCards.get(1).getRank().getValue()) {
-            //then 2+2 and we find second pair in turn.
-            Pair pairInTurn = findBestPair(turn);
-            if (pairInTurn != null)
-                return new TwoPairs(new Pair(playerCards.get(0),playerCards.get(1)),pairInTurn);
+        List<Pair> turnPairs = findAllPairs(turn);
+        Pair max = null;
+        if (!turnPairs.isEmpty()) {
+             max = Collections.max(turnPairs, pairComparator);
+        }
+        if (playerCards.get(0).getRank().getValue() == playerCards.get(1).getRank().getValue()) {
+            if (max !=null) {
+                return new TwoPairs(new Pair(playerCards.get(0),playerCards.get(1)),max);
+            }
         } else {
-            //then 1+1 and 1+1 we find
-            Pair one = null;
-            Pair two = null;
-            for (Card card : turn) {
-                if (playerCards.get(0).getRank().getValue() == card.getRank().getValue()) {
-                    one = new Pair(playerCards.get(0),card);
-                }
-                if (playerCards.get(1).getRank().getValue() == card.getRank().getValue()) {
-                    two = new Pair(playerCards.get(1),card);
-                }
+            //find pair with player 1 card
+            //find pair with player 2 card
+            //take max pair in turn
+            //and get max of all these three pairs
+            List<Card> turnWithFirst = new ArrayList<>(turn);
+            turnWithFirst.add(playerCards.get(0));
+            List<Card> turnWithSecond = new ArrayList<>(turn);
+            turnWithSecond.add(playerCards.get(1));
+            if (max != null) {
+                turnWithFirst.removeAll(max.getCards());
+                turnWithSecond.removeAll(max.getCards());
             }
-            if (one != null && two != null) {
-                return new TwoPairs(one, two);
-            }
-        }
+            List<Pair> availablePairs = new ArrayList<>();
 
-        //can be 1+1 and 2
-        Pair pair = null;
-        for (Card turnCard : turn) {
-            if (playerCards.get(0).getRank().getValue() == turnCard.getRank().getValue()) {
-                pair = new Pair(playerCards.get(0),turnCard);
+            List<Pair> p1 = findAllPairs(turnWithFirst);
+            List<Pair> p2 = findAllPairs(turnWithSecond);
+            if (!p1.isEmpty()) {
+                availablePairs.add(Collections.max(p1, pairComparator));
             }
-            if (playerCards.get(1).getRank().getValue() == turnCard.getRank().getValue()) {
-                pair = new Pair(playerCards.get(1),turnCard);
+            if (!p2.isEmpty()) {
+                availablePairs.add(Collections.max(p2, pairComparator));
             }
+            if (max != null) {
+                availablePairs.add(max);
+            }
+            Collections.sort(availablePairs,pairComparator);
+            if (availablePairs.size() >= 2) {
+                return new TwoPairs(availablePairs.get(0), availablePairs.get(1));
+            }
+            return null;
         }
-        //we find second pair in turn
-        if (pair != null) {
-            Pair pairInTurn = findBestPair(turn);
-            if (pairInTurn != null) {
-                return new TwoPairs(pair, pairInTurn);
-            }
-        }
-
         return null;
     }
 
@@ -167,7 +157,7 @@ public class CombinationHelper {
                         streetCards.add(card);
                     }
                     if (streetCards.size() == 5) {
-                        street = new Street(streetCards);
+                        street = new Street(streetCards, false);
                     }
                 }
             }
@@ -188,7 +178,7 @@ public class CombinationHelper {
                     } else
                         return null;
                 }
-                street = new Street(streetCards);
+                street = new Street(streetCards, true);
             }
         }
         //check is street contains not only river cards

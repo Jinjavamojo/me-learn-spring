@@ -177,6 +177,8 @@ public class CombinationsForOneCard {
                 }
                 if (i == 0 && resultTriplet.getSomeCombination() != o1.getSomeCombination()) {
                     bestCardSets.add(o1);
+                    o1.setEqualsToSomeElse(true);
+                    resultTriplet.getSomeCombination().setEqualsToSomeElse(true);
                 }
             }
         }

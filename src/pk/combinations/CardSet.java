@@ -10,6 +10,7 @@ import java.util.List;
 public abstract class CardSet<T> implements Comparable<T> {
 
     protected List<Card> cards;
+    boolean isEqualsToSomeElse = false;
 
     public List<Card> getCards() {
         return cards;
@@ -50,4 +51,12 @@ public abstract class CardSet<T> implements Comparable<T> {
     }
 
     public abstract  int compareTo(T t);
+
+    public boolean isEqualsToSomeElse() {
+        return isEqualsToSomeElse;
+    }
+
+    public void setEqualsToSomeElse(boolean isEqualsToSomeElse) {
+        this.isEqualsToSomeElse = isEqualsToSomeElse;
+    }
 }
