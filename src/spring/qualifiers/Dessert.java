@@ -1,4 +1,4 @@
-package spring.addressing;
+package spring.qualifiers;
 
 /**
  * Copyright 2016 LANIT group.
