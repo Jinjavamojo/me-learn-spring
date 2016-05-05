@@ -11,22 +11,39 @@ http://www.springframework.org/schema/aop
 http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
     <context:component-scan base-package="spring.aop" />
     <aop:aspectj-autoproxy />
-    <bean id="audience" class="spring.aop.XmlAudience"/>
+    <bean id="audience2" class="spring.aop.XmlAudience"/>
     <aop:config>
-        <aop:pointcut id="perf" expression="execution(* spring.aop.Perfomance.perform(..))"/>
-        <aop:aspect ref="audience">
-            <aop:before
-                    pointcut-ref="perf"
-                    method="silenceCellPhones"/>
-            <aop:before
-                    pointcut-ref="perf"
-                    method="takeSeats"/>
-            <aop:after-returning
-                    pointcut-ref="perf"
-                    method="applause"/>
-            <aop:after-throwing
-                    pointcut-ref="perf"
-                    method="demandRefund"/>
+        <aop:pointcut id="perf" expression="execution(* spring.aop.PerfomanceI.perform(..))"/>
+        <aop:aspect>
+            <aop:declare-parents
+                    types-matching="spring.aop.PerfomanceI+"
+                    implement-interface="spring.aop.Encoreable"
+                    default-impl="spring.aop.DefaultEncoreable"
+                    />
         </aop:aspect>
+        <aop:aspect ref="audience2">
+            <aop:around
+                    pointcut-ref="perf"
+                    method="watchPerformance"/>
+            <!--<aop:before-->
+                    <!--pointcut-ref="perf"-->
+                    <!--method="silenceCellPhones"/>-->
+            <!--<aop:before-->
+                    <!--pointcut-ref="perf"-->
+                    <!--method="takeSeats"/>-->
+            <!--<aop:after-returning-->
+                    <!--pointcut-ref="perf"-->
+                    <!--method="applause"/>-->
+            <!--<aop:after-throwing-->
+                    <!--pointcut-ref="perf"-->
+                    <!--method="demandRefund"/>-->
+        </aop:aspect>
+        <!--for AspectJ -->
+        <!--<bean class="com.springinaction.springidol.CriticAspect"-->
+              <!--factory-method="aspectOf">-->
+            <!--<property name="criticismEngine" ref="criticismEngine" />-->
+        <!--</bean>-->
+
+
     </aop:config>
 </beans>

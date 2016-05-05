@@ -1,4 +1,4 @@
-package spring.aspects;
+package spring.aop;
 
 /**
  * Created by Денис on 01.05.2016.

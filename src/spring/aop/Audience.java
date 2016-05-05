@@ -1,4 +1,4 @@
-package spring.aspects;
+package spring.aop;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class Audience {
 
-    @Pointcut("execution(** spring.aspects.Perfomance.perform(..))")
+    @Pointcut("execution(** spring.aop.Perfomance.perform(..))")
     //should be empty body
     public void performance() {}
 

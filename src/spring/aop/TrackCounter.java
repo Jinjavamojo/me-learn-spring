@@ -1,4 +1,4 @@
-package spring.aspects;
+package spring.aop;
 
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -20,7 +20,7 @@ public class TrackCounter {
             new HashMap<>();
 
     @Pointcut(
-            "execution(* spring.aspects.TrackPlayer.playTrack(int)) " +
+            "execution(* spring.aop.TrackPlayer.playTrack(int)) " +
                     "&& args(number)")
     public void trackPlayed(int number) {}
 

@@ -1,4 +1,4 @@
-package spring.aspects;
+package spring.aop;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,7 +9,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = AspectConfig.class)
-public class SpringTestProfiles {
+public class TestAnnotateAop {
 
     @Autowired
     public PerfomanceI perf;

@@ -12,13 +12,16 @@ import spring.simpleinjecting.MediaPlayer;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "aopconfig.xml")
-public class SpringTest1 {
+public class TestXmlAop {
 
     @Autowired
-    Perfomance perfomance;
+    PerfomanceI perfomance;
 
     @Test
     public void test(){
         perfomance.perform();
+        if (perfomance instanceof Encoreable) {
+            ((Encoreable) perfomance).encorage();
+        }
     }
 }

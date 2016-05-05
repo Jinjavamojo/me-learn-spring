@@ -3,19 +3,14 @@ package spring.aop;
 import org.springframework.stereotype.Component;
 
 /**
- * Copyright 2016 LANIT group.
- * http://www.lanit.ru/
- * <p/>
- * Repository path:    $HeadURL$
- * Last committed:     $Revision$
- * Last changed by:    $Author$
- * Last changed date:  $Date$
- * ID:                 $Id$
+ * Created by Денис on 01.05.2016.
  */
 @Component
-public class Perfomance {
+public class Perfomance implements PerfomanceI {
 
-    void perform() {
-        System.out.println("TADAAA");
+    @Override
+    public void perform() {
+        System.out.println("TAaAA-DA");
+
     }
 }
