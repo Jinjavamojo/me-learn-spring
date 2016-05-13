@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 public class Perfomance implements PerfomanceI {
 
     @Override
+    @Timed
     public void perform() {
         System.out.println("TAaAA-DA");
-
     }
 }

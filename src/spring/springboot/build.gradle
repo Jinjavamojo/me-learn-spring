@@ -1,0 +1,32 @@
+buildscript {
+    repositories {
+        mavenLocal()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin: 1.1.4.RELEASE")
+    }
+}
+apply plugin: 'java'
+apply plugin: 'spring-boot'
+jar {
+    baseName = 'contacts'
+    version =  '0.1.0'
+}
+repositories {
+    mavenCentral()
+}
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web")
+    /*
+    When  the  application  is  run,  Spring
+Boot will detect that Thymeleaf is in the
+classpath and will automatically configure the
+view resolver, template resolver, and template engine beans necessary to use Thyme-
+leaf with Spring
+MVC
+     */
+    compile("org.thymeleaf:thymeleaf-spring4")
+}
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.8'
+}
