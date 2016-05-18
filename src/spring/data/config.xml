@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop-4.0.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+    <beans profile="prod">
+        <bean  id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+            <property name="driverClassName" value="org.postgresql.Driver"></property>
+            <property name="username" value="postgres"></property>
+            <property name="url" value="jdbc:postgresql://rgu.samara.lanit.ru/rgu_mrg"></property>
+            <property name="password" value="root"></property>
+            <property name="initialSize" value="6"></property>
+            <property name="maxActive" value="20"></property>
+        </bean>
+        <jdbc:embedded-database id="embedded" type="H2">
+            <jdbc:script location="com/habuma/spitter/db/jdbc/schema.sql"/>
+            <jdbc:script location="com/habuma/spitter/db/jdbc/test-data.sql"/>
+        </jdbc:embedded-database>
+    </beans>
+
+
+</beans>
