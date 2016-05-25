@@ -2,11 +2,15 @@ package spring.data;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.context.annotation.*;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jndi.JndiObjectFactoryBean;
 
 import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * Copyright 2016 LANIT group.

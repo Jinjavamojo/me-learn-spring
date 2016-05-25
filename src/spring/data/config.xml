@@ -9,20 +9,28 @@ http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context.xsd
 http://www.springframework.org/schema/aop
 http://www.springframework.org/schema/aop/spring-aop-4.0.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
-    <beans profile="prod">
-        <bean  id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
-            <property name="driverClassName" value="org.postgresql.Driver"></property>
-            <property name="username" value="postgres"></property>
-            <property name="url" value="jdbc:postgresql://rgu.samara.lanit.ru/rgu_mrg"></property>
-            <property name="password" value="root"></property>
-            <property name="initialSize" value="6"></property>
-            <property name="maxActive" value="20"></property>
-        </bean>
-        <jdbc:embedded-database id="embedded" type="H2">
-            <jdbc:script location="com/habuma/spitter/db/jdbc/schema.sql"/>
-            <jdbc:script location="com/habuma/spitter/db/jdbc/test-data.sql"/>
-        </jdbc:embedded-database>
-    </beans>
+    <!--<beans profile="prod">-->
+        <!--<bean  id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">-->
+            <!--<property name="driverClassName" value="org.postgresql.Driver"></property>-->
+            <!--<property name="username" value="postgres"></property>-->
+            <!--<property name="url" value="jdbc:postgresql://rgu.samara.lanit.ru/rgu_mrg"></property>-->
+            <!--<property name="password" value="root"></property>-->
+            <!--<property name="initialSize" value="6"></property>-->
+            <!--<property name="maxActive" value="20"></property>-->
+        <!--</bean>-->
+        <!--<bean id="entityManagerFactory"-->
+              <!--class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">-->
+            <!--&lt;!&ndash;<property name="persistenceXmlLocation" value="classpath:META-INF/persistence.xml" />&ndash;&gt;-->
+            <!--&lt;!&ndash;<property name="persistenceUnitName" value="personPersistenceUnit" />&ndash;&gt;-->
+            <!--<property name="dataSource" ref="dataSource" />-->
+            <!--&lt;!&ndash;<property name="jpaVendorAdapter" ref="jpaVendorAdapter" />&ndash;&gt;-->
+            <!--&lt;!&ndash;<property name="jpaDialect" ref="jpaDialect" />&ndash;&gt;-->
+        <!--</bean>-->
+        <!--&lt;!&ndash;<jdbc:embedded-database id="embedded" type="H2">&ndash;&gt;-->
+            <!--&lt;!&ndash;<jdbc:script location="com/habuma/spitter/db/jdbc/schema.sql"/>&ndash;&gt;-->
+            <!--&lt;!&ndash;<jdbc:script location="com/habuma/spitter/db/jdbc/test-data.sql"/>&ndash;&gt;-->
+        <!--&lt;!&ndash;</jdbc:embedded-database>&ndash;&gt;-->
+    <!--</beans>-->
 
 
 </beans>
