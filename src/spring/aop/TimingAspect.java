@@ -4,12 +4,13 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 @Aspect
 @Component
-public class TimingAspect {
+public class TimingAspect implements Ordered {
     @Around(value = "@annotation(spring.aop.Timed)")
     static Object timeMethod(final ProceedingJoinPoint pjp) throws Throwable {
         return time(pjp,null);
@@ -41,5 +42,10 @@ public class TimingAspect {
             System.out.println();
 
         }
+    }
+
+    @Override
+    public int getOrder() {
+        return 10;
     }
 }

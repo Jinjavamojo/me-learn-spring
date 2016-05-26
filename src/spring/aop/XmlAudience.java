@@ -1,6 +1,7 @@
 package spring.aop;
 
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.springframework.core.Ordered;
 
 /**
  * Copyright 2016 LANIT group.
@@ -12,18 +13,18 @@ import org.aspectj.lang.ProceedingJoinPoint;
  * Last changed date:  $Date$
  * ID:                 $Id$
  */
-public class XmlAudience {
+public class XmlAudience implements Ordered {
 
     public void watchPerformance(ProceedingJoinPoint jp) {
         try {
-            System.out.println("Silencing cell phones");
-            System.out.println("Taking seats");
-            Object proceed = jp.proceed();
-            System.out.println(proceed);
-            System.out.println(jp.getSignature().toString());
-            System.out.println(jp.getSourceLocation().toString());
-            System.out.println(jp.getTarget().toString());
-            System.out.println("CLAP CLAP CLAP_XML!!!");
+            System.out.println("Silencing cell phones from xml");
+            System.out.println("Taking seats from xml");
+           Object proceed = jp.proceed();
+            //System.out.println(proceed);
+//            System.out.println(jp.getSignature().toString());
+//            System.out.println(jp.getSourceLocation().toString());
+//            System.out.println(jp.getTarget().toString());
+            System.out.println("CLAP CLAP CLAp from xml!!!");
         } catch (Throwable e) {
             System.out.println("Demanding a refund");
         }
@@ -40,5 +41,10 @@ public class XmlAudience {
     }
     public void demandRefund() {
         System.out.println("Demanding a refund");
+    }
+
+    @Override
+    public int getOrder() {
+        return 100;
     }
 }

@@ -1,6 +1,8 @@
 package spring.ormdata;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import spring.ormdata.entitites.Spitter;
 
@@ -25,7 +27,6 @@ import java.util.List;
  DAO method will be executed within same transaction.
  */
 @Service
-@Transactional
 public class ServiceLayerImpl implements ServiceLayer {
 
     @Inject
@@ -42,6 +43,7 @@ public class ServiceLayerImpl implements ServiceLayer {
     }
 
     @Override
+    @Transactional(isolation = Isolation.DEFAULT, noRollbackFor = RuntimeException.class, propagation = Propagation.REQUIRED)
     public Spitter findOne(long id) {
         return repository.findOne(id);
     }

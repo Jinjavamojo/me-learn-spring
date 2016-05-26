@@ -7,9 +7,12 @@ import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.inject.Inject;
+import javax.persistence.spi.PersistenceProvider;
 import javax.sql.DataSource;
 import java.util.Properties;
 
@@ -27,8 +30,11 @@ import java.util.Properties;
 @ImportResource("classpath:spring/data/config.xml")
 @PropertySource("classpath:/spring/data/application.properties")
 @ComponentScan("spring/ormdata")
+//http://docs.spring.io/spring/docs/current/spring-framework-reference/html/transaction.html#transaction-declarative
 //this allow automatic creation of sessions
-@EnableTransactionManagement //eq 	<tx:annotation-driven transaction-manager="txManager" />
+@EnableTransactionManagement(
+        mode = AdviceMode.PROXY,
+        proxyTargetClass = false) //eq 	<tx:annotation-driven transaction-manager="txManager" />
 // enabling Spring’s annotation-driven transaction management capability
 public class ORMDataSourceConfig {
 
