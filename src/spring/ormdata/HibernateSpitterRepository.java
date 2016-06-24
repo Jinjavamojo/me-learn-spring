@@ -1,30 +1,19 @@
 package spring.ormdata;
 
-import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
-
-import javax.inject.Inject;
-import org.hibernate.SessionFactory;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import spring.ormdata.entitites.Spitter;
 
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * Copyright 2016 LANIT group.
- * http://www.lanit.ru/
- * <p/>
- * Repository path:    $HeadURL$
- * Last committed:     $Revision$
- * Last changed by:    $Author$
- * Last changed date:  $Date$
- * ID:                 $Id$
- */
+/*
+@Repository serves another purpose. Recall that one of the jobs
+of a template class is to catch platform-specific exceptions and rethrow them as
+one of Spring’s unified unchecked exception
+But if you’re using Hibernate contextual sessions and not a Hibernate template, how can the exception translation take place?
 
+*/
 @Repository
 //@Transactional(propagation = Propagation.REQUIRED)
 public class HibernateSpitterRepository extends AbstractDao implements SpitterRepository  {
