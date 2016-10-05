@@ -30,6 +30,9 @@ public class DataTest extends Assert {
         assertNotNull(connection2);
 //        spitterRepository.count();
         layer.get(121321l);
+        layer.get(121321l);
+        layer.get(121321l);
+        layer.get(121321l);
         int g = 0;
     }
 }

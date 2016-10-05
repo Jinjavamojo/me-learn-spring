@@ -7,9 +7,12 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.expression.spel.SpelCompilerMode;
+import org.springframework.expression.spel.SpelParserConfiguration;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -33,6 +36,7 @@ import java.util.Properties;
 //@ImportResource("classpath:spring/data/config.xml")
 @PropertySource("classpath:/spring/data/application.properties")
 @EnableCaching
+@ComponentScan("spring.caching")
 @EnableTransactionManagement(
         mode = AdviceMode.PROXY,
         proxyTargetClass = false) //eq 	<tx:annotation-driven transaction-manager="txManager" />

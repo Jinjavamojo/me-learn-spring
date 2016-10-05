@@ -1,5 +1,9 @@
 package spring.caching;
+import org.hibernate.annotations.*;
+
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 
@@ -16,8 +20,6 @@ import java.io.Serializable;
 @Entity
 @Table(name = "BOOK")
 public class Book implements Serializable {
-
-
 
     @Id
     protected Long id;

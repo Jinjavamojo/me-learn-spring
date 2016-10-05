@@ -1,5 +1,6 @@
 package spring.caching;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 import spring.ormdata.AbstractDao;
 

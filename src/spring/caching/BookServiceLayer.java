@@ -1,5 +1,6 @@
 package spring.caching;
 
+import org.springframework.cache.annotation.Cacheable;
 import spring.ormdata.entitites.Spitter;
 
 /**
@@ -16,5 +17,6 @@ public interface BookServiceLayer {
 
     void save(Book book);
 
+    @Cacheable(key = "#result.isbn", value = "bookCache")
     Book get(long id);
 }
